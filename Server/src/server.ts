@@ -21,21 +21,21 @@ dotenv.config();
 
 // Initialize express app
 const app = express();
-const PORT = process.env.PORT;
-const CLIENT_URL = process.env.CLIENT_URL;
+const PORT = process.env.PORT ?? "3000";
 
+// CORS: allow CLIENT_URL (comma-separated for multiple origins)
+const allowedOrigins = (process.env.CLIENT_URL ?? "http://localhost:5173")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
 
-if (!PORT) {
-    throw new Error("PORT is not set");
-} 
-
-if (!CLIENT_URL) {
-    throw new Error("CLIENT_URL is not set");
-}
-
-// Cors
 app.use(cors({
-    origin: process.env.CLIENT_URL,
+    origin: (origin, callback) => {
+        // Allow requests with no origin (curl, Postman, server-to-server)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) return callback(null, true);
+        callback(new Error(`CORS: origin ${origin} not allowed`));
+    },
     credentials: true,
 }));
 

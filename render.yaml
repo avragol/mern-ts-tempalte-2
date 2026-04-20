@@ -1,0 +1,51 @@
+services:
+  # ── Backend API ──────────────────────────────────────────────────────────────
+  - type: web
+    name: golda-api
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: Server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false          # set manually in Render dashboard
+      - key: AUTH0_DOMAIN
+        sync: false
+      - key: AUTH0_AUDIENCE
+        sync: false
+      - key: CLIENT_URL
+        fromService:
+          name: golda-client
+          type: web
+          property: url
+
+  # ── Frontend Static Site ──────────────────────────────────────────────────────
+  - type: web
+    name: golda-client
+    runtime: static
+    region: oregon
+    plan: free
+    rootDir: Client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_AUTH0_DOMAIN
+        sync: false
+      - key: VITE_AUTH0_CLIENT_ID
+        sync: false
+      - key: VITE_AUTH0_AUDIENCE
+        sync: false
+      - key: VITE_API_URL
+        fromService:
+          name: golda-api
+          type: web
+          property: url
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

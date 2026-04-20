@@ -4,6 +4,9 @@
   "description": "Golda — knowledge management system server",
   "main": "src/server.ts",
   "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "start": "node dist/server.js",
     "dev": "tsx --watch src/server.ts",
