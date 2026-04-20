@@ -1,5 +1,5 @@
 import type { ComponentType, ReactNode } from "react";
-import { Home, User, LayoutDashboard, Settings } from "lucide-react";
+import { Home, User, LayoutDashboard, Settings, BookOpen, Plus, FileText } from "lucide-react";
 import type { SVGProps } from "react";
 import HomePage, { HomePageLoader } from "../pages/HomePage";
 import ProfilePage from "../pages/ProfilePage";
@@ -11,6 +11,10 @@ import DashboardReportsPage from "../pages/DashboardReportsPage";
 import GeneralSettingsPage from "../pages/GeneralSettingsPage";
 import SecuritySettingsPage from "../pages/SecuritySettingsPage";
 import NotificationsSettingsPage from "../pages/NotificationsSettingsPage";
+import ItemsPage from "../pages/ItemsPage";
+import ItemDetailPage from "../pages/ItemDetailPage";
+import ItemCreatePage from "../pages/ItemCreatePage";
+import ItemEditPage from "../pages/ItemEditPage";
 
 // Type for Lucide icons
 export type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>;
@@ -73,6 +77,42 @@ export const routeConfig: RouteConfig[] = [
         name: "Preferences",
         Component: ProfilePreferencesPage,
         showInSidebar: true,
+      },
+    ],
+  },
+  {
+    path: "/items",
+    name: "Knowledge Base",
+    icon: BookOpen,
+    showInSidebar: true,
+    requireAuth: true,
+    children: [
+      {
+        path: "/items",
+        name: "All Items",
+        Component: ItemsPage,
+        showInSidebar: true,
+        index: true,
+      },
+      {
+        path: "new",
+        name: "New Item",
+        Component: ItemCreatePage,
+        icon: Plus,
+        showInSidebar: true,
+      },
+      {
+        path: ":id",
+        name: "Item Detail",
+        Component: ItemDetailPage,
+        showInSidebar: false,
+      },
+      {
+        path: ":id/edit",
+        name: "Edit Item",
+        Component: ItemEditPage,
+        icon: FileText,
+        showInSidebar: false,
       },
     ],
   },

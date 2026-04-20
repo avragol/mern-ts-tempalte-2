@@ -1,7 +1,7 @@
 {
-  "name": "mern-ts-template",
-  "version": "1.0.0",
-  "description": "MERN Stack TypeScript Template with Auth0",
+  "name": "golda",
+  "version": "0.1.0",
+  "description": "Golda — personal knowledge management system",
   "private": true,
   "type": "module",
   "scripts": {

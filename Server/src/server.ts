@@ -13,6 +13,8 @@ import { errorHandler } from "./utils/errorHandler.js";
 import userRoutes from "./routes/userRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import dangerRoutes from "./routes/dangerRoutes.js";
+import itemRoutes from "./routes/itemRoutes.js";
+import { upload } from "./middleware/uploadMdw.js";
 
 // Config Middleware
 dotenv.config();
@@ -60,7 +62,24 @@ app.get("/health", (req, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/items", itemRoutes);
 app.use("/danger", dangerRoutes);
+
+// File upload endpoint
+app.post("/api/upload", upload.single("file"), (req, res) => {
+    if (!req.file) {
+        res.status(400).json({ success: false, error: "No file uploaded" });
+        return;
+    }
+    res.status(200).json({
+        success: true,
+        url: `/uploads/${req.file.filename}`,
+        filename: req.file.filename,
+    });
+});
+
+// Serve uploaded files
+app.use("/uploads", express.static("uploads"));
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

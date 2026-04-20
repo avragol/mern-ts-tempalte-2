@@ -1,7 +1,7 @@
 {
-  "name": "mern-auth0-template-server",
-  "version": "1.0.0",
-  "description": "MERN Stack Template with Auth0 - Backend Server",
+  "name": "golda-server",
+  "version": "0.1.0",
+  "description": "Golda — knowledge management system server",
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
@@ -27,6 +27,7 @@
     "i": "^0.3.7",
     "mongoose": "^8.18.2",
     "morgan": "^1.10.1",
+    "multer": "^1.4.5-lts.2",
     "npm": "^11.6.1",
     "tsx": "^4.20.5",
     "zod": "^4.1.11"
@@ -36,6 +37,7 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",
+    "@types/multer": "^1.4.12",
     "@types/node": "^24.5.2",
     "eslint": "^9.39.4",
     "tsc-alias": "^1.8.16",
