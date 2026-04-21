@@ -1,47 +1,37 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { 
-  Shield, 
-  Palette, 
-  Code, 
-  Database, 
-  Zap, 
-  Lock, 
+import { useNavigate } from "react-router";
+import {
+  Shield,
+  Palette,
+  Code,
+  Database,
+  Zap,
+  Lock,
   Rocket,
   ArrowRight,
   Github,
   BookOpen
 } from "lucide-react";
-import {
-  SiReact,
-  SiTypescript,
-  SiVite,
-  SiExpress,
-  SiMongodb,
-  SiAuth0,
-  SiRedux,
-  SiReactquery,
-  SiTailwindcss,
-  SiDocker
-} from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Atoms/Badge";
 import { Heading } from "@/components/Atoms/Heading";
 import { Text } from "@/components/Atoms/Text";
 import { Icon } from "@/components/Atoms/Icon";
 import { FeatureCard } from "@/components/Molecules/FeatureCard";
-import { TechBadge } from "@/components/Molecules/TechBadge";
 import { BenefitItem } from "@/components/Molecules/BenefitItem";
 import { Section } from "@/components/Molecules/Section";
 import { Hero } from "@/components/Molecules/Hero";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function HomePage() {
-  const { loginWithRedirect, isAuthenticated } = useAuth0();
+  const navigate = useNavigate();
+  const { user } = useAppSelector((state) => state.user);
+  const isAuthenticated = !!user;
 
   const features = [
     {
       icon: Shield,
-      title: "Auth0 Integration",
-      description: "Complete JWT-based authentication with automatic user creation and token management",
+      title: "JWT Authentication",
+      description: "Complete self-hosted JWT-based authentication with automatic user creation and token management",
       iconColor: "text-blue-600",
       iconBgColor: "bg-blue-50",
     },
@@ -82,21 +72,8 @@ export default function HomePage() {
     },
   ];
 
-  const techStack = [
-    { name: "React 19", category: "Frontend", icon: SiReact, iconColor: "#61DAFB" },
-    { name: "TypeScript", category: "Language", icon: SiTypescript, iconColor: "#3178C6" },
-    { name: "Vite", category: "Build Tool", icon: SiVite, iconColor: "#646CFF" },
-    { name: "Express 5", category: "Backend", icon: SiExpress, iconColor: "#000000" },
-    { name: "MongoDB", category: "Database", icon: SiMongodb, iconColor: "#47A248" },
-    { name: "Auth0", category: "Auth", icon: SiAuth0, iconColor: "#EB5424" },
-    { name: "Redux Toolkit", category: "State", icon: SiRedux, iconColor: "#764ABC" },
-    { name: "TanStack Query", category: "Data", icon: SiReactquery, iconColor: "#FF4154" },
-    { name: "Tailwind CSS", category: "Styling", icon: SiTailwindcss, iconColor: "#06B6D4" },
-    { name: "Docker", category: "DevOps", icon: SiDocker, iconColor: "#0DB7ED" },
-  ];
-
   const benefits = [
-    "Automatic user creation on first login",
+    "Automatic user creation on registration",
     "Protected routes with role-based access",
     "Comprehensive design system documentation",
     "Docker support for easy deployment",
@@ -120,16 +97,16 @@ export default function HomePage() {
               MERN Stack Template
             </Heading>
             <Heading level={1} gradient>
-              with Auth0
+              with JWT Auth
             </Heading>
           </>
         }
-        description="A modern, production-ready MERN (MongoDB, Express, React, Node.js) stack template with Auth0 authentication and a clean modern design system."
+        description="A modern, production-ready MERN (MongoDB, Express, React, Node.js) stack template with self-hosted JWT authentication and a clean modern design system."
         actions={
           <>
             {!isAuthenticated ? (
-              <Button 
-                onClick={() => loginWithRedirect()}
+              <Button
+                onClick={() => navigate("/register")}
                 size="lg"
                 className="text-lg px-8 py-6"
               >
@@ -137,7 +114,8 @@ export default function HomePage() {
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             ) : (
-              <Button 
+              <Button
+                onClick={() => navigate("/items")}
                 size="lg"
                 className="text-lg px-8 py-6"
               >
@@ -145,8 +123,8 @@ export default function HomePage() {
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             )}
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               size="lg"
               className="text-lg px-8 py-6"
               onClick={() => window.open("https://github.com", "_blank")}
@@ -177,25 +155,6 @@ export default function HomePage() {
         </div>
       </Section>
 
-      {/* Tech Stack Section */}
-      <Section
-        title="Built with Modern Technologies"
-        subtitle="Leveraging the latest tools and frameworks for optimal performance"
-        variant="gradient"
-      >
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {techStack.map((tech, index) => (
-            <TechBadge 
-              key={index} 
-              name={tech.name} 
-              category={tech.category} 
-              icon={tech.icon}
-              iconColor={tech.iconColor}
-            />
-          ))}
-        </div>
-      </Section>
-
       {/* Benefits Section */}
       <Section title="Why Choose This Template?">
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -204,7 +163,7 @@ export default function HomePage() {
               Why Choose This Template?
             </Heading>
             <Text variant="lead" color="muted" className="mb-8">
-              Start building your application immediately with a solid foundation 
+              Start building your application immediately with a solid foundation
               that includes authentication, state management, and a beautiful UI.
             </Text>
             <ul className="space-y-4">
@@ -249,8 +208,8 @@ export default function HomePage() {
           </Text>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {!isAuthenticated ? (
-              <Button 
-                onClick={() => loginWithRedirect()}
+              <Button
+                onClick={() => navigate("/register")}
                 size="lg"
                 variant="secondary"
                 className="text-lg px-8 py-6 bg-white text-blue-600 hover:bg-gray-100"
@@ -259,7 +218,8 @@ export default function HomePage() {
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             ) : (
-              <Button 
+              <Button
+                onClick={() => navigate("/items")}
                 size="lg"
                 variant="secondary"
                 className="text-lg px-8 py-6 bg-white text-blue-600 hover:bg-gray-100"
@@ -268,7 +228,7 @@ export default function HomePage() {
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             )}
-            <Button 
+            <Button
               size="lg"
               variant="outline"
               className="text-lg px-8 py-6 border-2 border-white text-white hover:bg-white/10"

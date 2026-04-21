@@ -1,17 +1,20 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/slices/userSlice";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { getSidebarMenuItems, routeConfig } from "@/config/routesConfig";
 import type { SidebarMenuItem, SidebarSubMenuItem } from "@/config/routesConfig";
 
 export default function Sidebar() {
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.user);
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
+
+  const isAuthenticated = !!user;
 
   const toggleMenu = (label: string) => {
     setExpandedMenus((prev) => {
@@ -25,11 +28,10 @@ export default function Sidebar() {
     });
   };
 
-  // Get menu items from shared route config
   const menuItems: SidebarMenuItem[] = getSidebarMenuItems(
     routeConfig,
     isAuthenticated,
-    user?.role // Assuming user has a role property, adjust if needed
+    user?.role
   );
 
   const isActive = (path?: string) => {
@@ -40,6 +42,11 @@ export default function Sidebar() {
   const isSubMenuActive = (subMenus?: SidebarSubMenuItem[]) => {
     if (!subMenus) return false;
     return subMenus.some((subMenu) => location.pathname === subMenu.path);
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
   };
 
   return (
@@ -144,7 +151,7 @@ export default function Sidebar() {
               </div>
             </div>
             <Button
-              onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+              onClick={handleLogout}
               variant="outline"
               className="w-full"
             >
@@ -153,7 +160,7 @@ export default function Sidebar() {
           </div>
         ) : (
           <Button
-            onClick={() => loginWithRedirect()}
+            onClick={() => navigate("/login")}
             className="w-full"
           >
             Login
@@ -163,4 +170,3 @@ export default function Sidebar() {
     </aside>
   );
 }
-

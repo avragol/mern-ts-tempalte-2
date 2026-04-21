@@ -1,19 +1,26 @@
-import { Link } from "react-router";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/redux/hooks";
+import { logout } from "@/redux/slices/userSlice";
 
 export default function Header() {
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.user);
+  const isAuthenticated = !!user;
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
 
   return (
     <header className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-11/12 max-w-6xl">
       <nav className="bg-white/20 backdrop-blur-xl rounded-3xl px-6 py-4 shadow-lg border border-white/30">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition-colors duration-300"
           >
             YourApp
@@ -21,15 +28,15 @@ export default function Header() {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="text-gray-700 hover:text-blue-600 hover:bg-white/40 transition-all duration-300 font-semibold text-sm px-3 py-1 rounded-xl"
             >
               Home
             </Link>
             {isAuthenticated && (
-              <Link 
-                to="/profile" 
+              <Link
+                to="/profile"
                 className="text-gray-700 hover:text-blue-600 hover:bg-white/40 transition-all duration-300 font-semibold text-sm px-3 py-1 rounded-xl"
               >
                 Profile
@@ -52,7 +59,7 @@ export default function Header() {
                   {user?.firstName} {user?.lastName}
                 </span>
                 <Button
-                  onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}
+                  onClick={handleLogout}
                   variant="outline"
                   className="bg-white/90 hover:bg-white text-gray-700"
                 >
@@ -61,7 +68,7 @@ export default function Header() {
               </div>
             ) : (
               <Button
-                onClick={() => loginWithRedirect()}
+                onClick={() => navigate("/login")}
                 className="bg-white/90 hover:bg-white text-blue-600 shadow-sm hover:shadow-md transition-all duration-300"
               >
                 Login
@@ -73,4 +80,3 @@ export default function Header() {
     </header>
   );
 }
-
