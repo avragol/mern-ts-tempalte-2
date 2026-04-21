@@ -1,21 +1,11 @@
 import { Outlet } from "react-router";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAppSelector } from "@/redux/hooks";
 import { Sidebar } from "../components/Organisms/Sidebar";
 import { Footer } from "../components/Organisms/Footer";
-import { LoadingSpinner } from "@/components/Atoms";
 
 export default function Layout() {
-  const { isAuthenticated, isLoading } = useAuth0();
-
-  // Wait for Auth0 to finish loading before rendering layout
-  // This prevents the sidebar from flashing in/out
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <LoadingSpinner size="lg" text="Loading..." />
-      </div>
-    );
-  }
+  const { user } = useAppSelector((state) => state.user);
+  const isAuthenticated = !!user;
 
   return (
     <div className="flex min-h-screen">

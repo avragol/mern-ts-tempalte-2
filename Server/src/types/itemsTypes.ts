@@ -14,7 +14,7 @@ export interface IItem {
   content: string
   type: ItemType
   tags: string[]
-  createdBy: string   // auth0Id of the creator
+  createdBy: string   // userId (_id.toString())
   isPublic: boolean
   metadata?: IItemMetadata
   attachments: string[]
@@ -26,5 +26,5 @@ export interface IItemDoc extends IItem, Document {
 }
 
 export interface IItemModel extends Model<IItemDoc> {
-  findByCreator(auth0Id: string): Promise<IItemDoc[]>
+  findByCreator(userId: string): Promise<IItemDoc[]>
 }

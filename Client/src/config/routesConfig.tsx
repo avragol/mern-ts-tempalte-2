@@ -15,6 +15,8 @@ import ItemsPage from "../pages/ItemsPage";
 import ItemDetailPage from "../pages/ItemDetailPage";
 import ItemCreatePage from "../pages/ItemCreatePage";
 import ItemEditPage from "../pages/ItemEditPage";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 // Type for Lucide icons
 export type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>;
@@ -43,6 +45,18 @@ export interface RouteConfig {
 
 // Define all routes in one place
 export const routeConfig: RouteConfig[] = [
+  {
+    path: "/login",
+    name: "Login",
+    Component: LoginPage,
+    showInSidebar: false,
+  },
+  {
+    path: "/register",
+    name: "Register",
+    Component: RegisterPage,
+    showInSidebar: false,
+  },
   {
     path: "/",
     name: "Home",

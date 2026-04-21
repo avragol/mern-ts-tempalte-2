@@ -10,7 +10,7 @@ const itemSchema = new Schema<IItemDoc>({
     required: true,
   },
   tags: { type: [String], default: [] },
-  createdBy: { type: String, required: true }, // auth0Id
+  createdBy: { type: String, required: true }, // userId (_id.toString())
   isPublic: { type: Boolean, default: false },
   metadata: {
     language: { type: String },
@@ -31,8 +31,8 @@ itemSchema.index({ title: 'text', content: 'text', tags: 'text' })
 // Compound index for efficient per-user queries
 itemSchema.index({ createdBy: 1, type: 1 })
 
-itemSchema.statics.findByCreator = async function(auth0Id: string) {
-  return this.find({ createdBy: auth0Id })
+itemSchema.statics.findByCreator = async function(userId: string) {
+  return this.find({ createdBy: userId })
 }
 
 const ItemModel = mongoose.model<IItemDoc, IItemModel>('Item', itemSchema)

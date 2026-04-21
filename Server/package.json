@@ -25,7 +25,8 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
-    "express-oauth2-jwt-bearer": "^1.7.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
     "express-rate-limit": "^8.1.0",
     "i": "^0.3.7",
     "mongoose": "^8.18.2",
@@ -37,6 +38,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/morgan": "^1.9.10",

@@ -1,16 +1,29 @@
 import { z } from "zod";
-// import type { IUser } from "../types";
+
+export const registerSchema = z.object({
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    email: z.string().email(),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export const loginSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(1),
+});
 
 export const createUserSchema = z.object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
+    email: z.string().email(),
+    password: z.string().min(8),
     phone: z.string().optional(),
     profilePicture: z.string().optional(),
-    auth0Id: z.string().min(1),
-    email: z.string().email(),
 });
 
 export const updateUserSchema = z.object({
-    name: z.string().min(1),
-    email: z.string().email(),
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    phone: z.string().optional(),
+    profilePicture: z.string().optional(),
 }).partial();

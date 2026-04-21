@@ -1,6 +1,6 @@
-import { useAuth0 } from "@auth0/auth0-react";
 import { useAppSelector } from "@/redux/hooks";
 import type { ReactNode } from "react";
+import { Navigate } from "react-router";
 
 interface ProtectedRouteProps {
   children: ReactNode;
@@ -8,25 +8,21 @@ interface ProtectedRouteProps {
   fallback?: ReactNode;
 }
 
-export default function ProtectedRoute({ 
-  children, 
-  requiredRole, 
-  fallback = <div>Access denied. You don't have permission to view this page.</div> 
-}: ProtectedRouteProps) {
-  const { isAuthenticated, isLoading } = useAuth0();
-  const { user } = useAppSelector((state) => state.user);
+export default function ProtectedRoute({ children, requiredRole, fallback }: ProtectedRouteProps) {
+  const { user, loading } = useAppSelector((state) => state.user);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-gray-500">Loading...</div>
+      </div>
+    );
   }
 
-  if (!isAuthenticated) {
-    return <div>Please log in to access this page.</div>;
-  }
+  if (!user) return <Navigate to="/login" replace />;
 
-  // If a specific role is required, check if user has that role
-  if (requiredRole && user?.role !== requiredRole) {
-    return fallback;
+  if (requiredRole && user.role !== requiredRole) {
+    return fallback ?? <div className="p-8 text-center text-gray-600">Access denied.</div>;
   }
 
   return <>{children}</>;

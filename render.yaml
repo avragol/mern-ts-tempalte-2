@@ -14,9 +14,7 @@ services:
         value: production
       - key: MONGO_URI
         sync: false
-      - key: AUTH0_DOMAIN
-        sync: false
-      - key: AUTH0_AUDIENCE
+      - key: JWT_SECRET
         sync: false
       - key: CLIENT_URL
         sync: false   # fill after golda-client is deployed
@@ -29,12 +27,6 @@ services:
     buildCommand: npm install && npm run build
     staticPublishPath: dist
     envVars:
-      - key: VITE_AUTH0_DOMAIN
-        sync: false
-      - key: VITE_AUTH0_CLIENT_ID
-        sync: false
-      - key: VITE_AUTH0_AUDIENCE
-        sync: false
       - key: VITE_API_URL
         sync: false   # fill after golda-api is deployed
     routes:

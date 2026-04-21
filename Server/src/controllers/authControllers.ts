@@ -1,52 +1,45 @@
 import type { Request, Response } from "express";
-import User from "../models/userModel";
-import { AppError } from "@/utils/errorHandler";
+import bcrypt from "bcryptjs";
+import User from "@/models/userModel.js";
+import { AppError } from "@/utils/errorHandler.js";
+import { generateToken } from "@/utils/jwt.js";
+import { registerSchema, loginSchema } from "@/zod/usersZod.js";
 
 class AuthController {
-    async getCurrentUser(req: Request, res: Response) {
-        // Get user info from JWT payload
-        const userInfo = req.auth?.payload;
-        
-        // console.log(userInfo);
-        if (!userInfo || !userInfo.sub) {
-            throw new AppError('User information not found in token', 401);
-        }
+    async register(req: Request, res: Response) {
+        const { firstName, lastName, email, password } = registerSchema.parse(req.body);
 
-        // Find user in database by auth0Id from JWT
-        const user = await User.findByAuth0Id(userInfo.sub);
-        if (!user) {
-            throw new AppError('User not found', 404);
-        }
-        
-        res.status(200).json({
-            success: true,
-            data: user
-        });
+        const existing = await User.findOne({ email });
+        if (existing) throw new AppError("Email already in use", 409);
+
+        const hashed = await bcrypt.hash(password, 12);
+        const user = await User.create({ firstName, lastName, email, password: hashed });
+
+        const token = generateToken({ userId: user._id.toString(), email: user.email, role: user.role });
+        const { password: _pw, ...safeUser } = user.toObject();
+
+        res.status(201).json({ success: true, data: { token, user: safeUser } });
     }
 
-    async validateToken(req: Request, res: Response) {
-        // The JWT middleware has already validated the token
-        // The user information is available in req.auth
-        const userInfo = req.auth?.payload;
-        
-        if (!userInfo) {
-            throw new AppError('Token validation failed', 401);
-        }
+    async login(req: Request, res: Response) {
+        const { email, password } = loginSchema.parse(req.body);
 
-        res.status(200).json({
-            success: true,
-            message: 'Token is valid',
-            data: {
-                sub: userInfo.sub,
-                email: userInfo.email,
-                name: userInfo.name,
-                email_verified: userInfo.email_verified,
-                aud: userInfo.aud,
-                iss: userInfo.iss,
-                iat: userInfo.iat,
-                exp: userInfo.exp
-            }
-        });
+        const user = await User.findByEmail(email);
+        if (!user) throw new AppError("Invalid credentials", 401);
+
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) throw new AppError("Invalid credentials", 401);
+
+        const token = generateToken({ userId: user._id.toString(), email: user.email, role: user.role });
+        const { password: _pw, ...safeUser } = user.toObject();
+
+        res.status(200).json({ success: true, data: { token, user: safeUser } });
+    }
+
+    async getCurrentUser(req: Request, res: Response) {
+        const user = await User.findById(req.userId);
+        if (!user) throw new AppError("User not found", 404);
+        res.status(200).json({ success: true, data: user });
     }
 }
 
