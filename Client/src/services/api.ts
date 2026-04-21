@@ -1,17 +1,12 @@
 import axios from "axios";
 
-// In development, use relative URLs to leverage Vite proxy
-// In production, use the full API URL from environment variable
 const getBaseURL = () => {
-    // If VITE_API_URL is explicitly set and not empty, use it
     if (import.meta.env.VITE_API_URL) {
-        return import.meta.env.VITE_API_URL;
+        // Strip trailing /api if already present, then always append it
+        const url = import.meta.env.VITE_API_URL.replace(/\/api\/?$/, '').replace(/\/$/, '');
+        return `${url}/api`;
     }
-    // In development, use relative URL (will be proxied by Vite)
-    if (import.meta.env.DEV) {
-        return '';
-    }
-    // Fallback for production
+    // Dev mode: use relative URL so Vite proxy handles /api/*
     return '/api';
 };
 
