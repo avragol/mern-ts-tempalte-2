@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import type { Types } from "mongoose";
 import User from "@/models/userModel.js";
 import { AppError } from "@/utils/errorHandler.js";
 import { generateToken } from "@/utils/jwt.js";
@@ -15,7 +16,7 @@ class AuthController {
         const hashed = await bcrypt.hash(password, 12);
         const user = await User.create({ firstName, lastName, email, password: hashed });
 
-        const token = generateToken({ userId: user._id.toString(), email: user.email, role: user.role });
+        const token = generateToken({ userId: (user._id as Types.ObjectId).toString(), email: user.email, role: user.role });
         const { password: _pw, ...safeUser } = user.toObject();
 
         res.status(201).json({ success: true, data: { token, user: safeUser } });
@@ -30,7 +31,7 @@ class AuthController {
         const match = await bcrypt.compare(password, user.password);
         if (!match) throw new AppError("Invalid credentials", 401);
 
-        const token = generateToken({ userId: user._id.toString(), email: user.email, role: user.role });
+        const token = generateToken({ userId: (user._id as Types.ObjectId).toString(), email: user.email, role: user.role });
         const { password: _pw, ...safeUser } = user.toObject();
 
         res.status(200).json({ success: true, data: { token, user: safeUser } });

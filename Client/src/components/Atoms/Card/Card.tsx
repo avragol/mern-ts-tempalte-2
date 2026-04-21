@@ -6,6 +6,7 @@ export interface CardProps {
   className?: string;
   variant?: "default" | "outlined" | "elevated";
   hover?: boolean;
+  onClick?: () => void;
 }
 
 const variantClasses = {
@@ -14,14 +15,16 @@ const variantClasses = {
   elevated: "bg-white shadow-md",
 };
 
-export default function Card({ 
-  children, 
-  className, 
+export default function Card({
+  children,
+  className,
   variant = "default",
-  hover = false 
+  hover = false,
+  onClick,
 }: CardProps) {
   return (
     <div
+      onClick={onClick}
       className={cn(
         "rounded-2xl p-6 transition-all duration-300",
         variantClasses[variant],
