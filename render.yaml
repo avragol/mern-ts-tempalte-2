@@ -25,7 +25,6 @@ services:
   - type: web
     name: golda-client
     runtime: static
-    plan: free
     rootDir: Client
     buildCommand: npm install && npm run build
     staticPublishPath: dist
