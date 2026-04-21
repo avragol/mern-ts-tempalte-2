@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
-import type { IItemDoc, IItemModel } from '@/types'
+import type { IItemDoc, IItemModel } from '@/types/index.js'
 
 const itemSchema = new Schema<IItemDoc>({
   title: { type: String, required: true },

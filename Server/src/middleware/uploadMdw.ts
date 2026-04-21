@@ -2,7 +2,7 @@ import multer from 'multer'
 import path from 'path'
 import fs from 'fs'
 import type { Request } from 'express'
-import { AppError } from '@/utils/errorHandler'
+import { AppError } from '@/utils/errorHandler.js'
 
 const UPLOADS_DIR = 'uploads'
 
