@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import User from "@/models/userModel.js";
-import { createUserSchema, updateUserSchema } from "@/zod/usersZod.js";
+import { createUserSchema, updateUserSchema } from "@/schemas/usersZod.js";
 import { AppError } from "@/utils/errorHandler.js";
 
 class UsersController {

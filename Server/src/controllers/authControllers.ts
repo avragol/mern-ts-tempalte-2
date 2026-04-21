@@ -4,7 +4,7 @@ import type { Types } from "mongoose";
 import User from "@/models/userModel.js";
 import { AppError } from "@/utils/errorHandler.js";
 import { generateToken } from "@/utils/jwt.js";
-import { registerSchema, loginSchema } from "@/zod/usersZod.js";
+import { registerSchema, loginSchema } from "@/schemas/usersZod.js";
 
 class AuthController {
     async register(req: Request, res: Response) {

@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express'
 import Item from '@/models/itemModel.js'
-import { createItemSchema, updateItemSchema } from '@/zod/itemsZod.js'
+import { createItemSchema, updateItemSchema } from '@/schemas/itemsZod.js'
 import { AppError } from '@/utils/errorHandler.js'
 
 class ItemsController {
