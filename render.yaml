@@ -13,22 +13,18 @@ services:
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        sync: false          # set manually in Render dashboard
+        sync: false
       - key: AUTH0_DOMAIN
         sync: false
       - key: AUTH0_AUDIENCE
         sync: false
       - key: CLIENT_URL
-        fromService:
-          name: golda-client
-          type: web
-          property: url
+        sync: false   # fill after golda-client is deployed
 
   # ── Frontend Static Site ──────────────────────────────────────────────────────
   - type: web
     name: golda-client
     runtime: static
-    region: oregon
     plan: free
     rootDir: Client
     buildCommand: npm install && npm run build
@@ -41,10 +37,7 @@ services:
       - key: VITE_AUTH0_AUDIENCE
         sync: false
       - key: VITE_API_URL
-        fromService:
-          name: golda-api
-          type: web
-          property: url
+        sync: false   # fill after golda-api is deployed
     routes:
       - type: rewrite
         source: /*
