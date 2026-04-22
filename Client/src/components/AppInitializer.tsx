@@ -17,6 +17,15 @@ export default function AppInitializer({ children }: { children: ReactNode }) {
     }
   }, [dispatch]);
 
+  useEffect(() => {
+    const apiBase = import.meta.env.VITE_API_URL
+      ?.replace(/\/api\/?$/, "").replace(/\/$/, "") ?? "";
+    const id = setInterval(() => {
+      fetch(`${apiBase}/health`).catch(() => {});
+    }, 10 * 60 * 1000);
+    return () => clearInterval(id);
+  }, []);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
