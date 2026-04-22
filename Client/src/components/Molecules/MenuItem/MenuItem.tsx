@@ -36,8 +36,8 @@ export default function MenuItem({
             className={cn(
               "w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-colors",
               isActive
-                ? "bg-blue-50 text-blue-600"
-                : "text-gray-700 hover:bg-gray-100"
+                ? "bg-sidebar-accent text-primary"
+                : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"
             )}
           >
             <div className="flex items-center gap-3">
@@ -56,7 +56,7 @@ export default function MenuItem({
                 <li key={subMenu.path}>
                   <Link
                     to={subMenu.path}
-                    className="block px-3 py-2 rounded-md text-sm transition-colors text-gray-600 hover:bg-gray-100"
+                    className="block px-3 py-2 rounded-md text-sm transition-colors text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground"
                   >
                     {subMenu.label}
                   </Link>
@@ -71,8 +71,8 @@ export default function MenuItem({
           className={cn(
             "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors",
             isActive
-              ? "bg-blue-50 text-blue-600"
-              : "text-gray-700 hover:bg-gray-100"
+              ? "bg-sidebar-accent text-primary"
+              : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground"
           )}
         >
           {icon}
@@ -82,4 +82,3 @@ export default function MenuItem({
     </li>
   );
 }
-

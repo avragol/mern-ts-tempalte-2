@@ -9,5 +9,6 @@ const authController = new AuthController();
 router.post("/register", asyncHandler(authController.register.bind(authController)));
 router.post("/login", asyncHandler(authController.login.bind(authController)));
 router.get("/me", authMiddleware, asyncHandler(authController.getCurrentUser.bind(authController)));
+router.post("/change-password", authMiddleware, asyncHandler(authController.changePassword.bind(authController)));
 
 export default router;

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
+import { AnimatePresence, motion } from "framer-motion";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/slices/userSlice";
@@ -8,11 +10,12 @@ import type { SidebarMenuItem, SidebarSubMenuItem } from "@/config/routesConfig"
 import { MenuItem } from "@/components/Molecules/MenuItem";
 
 export interface SidebarProps {
-  appName?: string;
+  open?: boolean;
+  onClose?: () => void;
   className?: string;
 }
 
-export default function Sidebar({ appName = "YourApp", className }: SidebarProps) {
+export default function Sidebar({ open = false, onClose, className }: SidebarProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.user);
@@ -54,12 +57,28 @@ export default function Sidebar({ appName = "YourApp", className }: SidebarProps
     navigate("/login");
   };
 
-  return (
-    <aside className={`fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 flex flex-col z-40 ${className || ""}`}>
-      <div className="h-16 border-b border-gray-200 flex items-center px-6">
-        <Link to="/" className="text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors">
-          {appName}
+  const sidebarContent = (
+    <aside
+      className={`h-full w-64 flex flex-col bg-sidebar border-r border-sidebar-border ${className ?? ""}`}
+    >
+      <div className="h-16 border-b border-sidebar-border flex items-center justify-between px-5">
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 text-xl font-bold text-sidebar-foreground hover:text-primary transition-colors"
+          onClick={onClose}
+        >
+          <span className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center text-primary-foreground text-sm font-black flex-shrink-0">
+            G
+          </span>
+          Golda
         </Link>
+        <button
+          onClick={onClose}
+          className="md:hidden p-1 rounded text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors"
+          aria-label="Close menu"
+        >
+          <X className="w-5 h-5" />
+        </button>
       </div>
 
       <nav className="flex-1 overflow-y-auto py-4">
@@ -83,19 +102,33 @@ export default function Sidebar({ appName = "YourApp", className }: SidebarProps
         </ul>
       </nav>
 
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-sidebar-border p-4">
         {isAuthenticated ? (
           <div className="space-y-3">
-            <div className="flex items-center gap-3 px-2">
-              {user?.profilePicture && (
-                <img src={user.profilePicture} alt={user.firstName} className="w-10 h-10 rounded-full border-2 border-gray-200" />
+            <div className="flex items-center gap-3 px-1">
+              {user?.profilePicture ? (
+                <img
+                  src={user.profilePicture}
+                  alt={user.firstName}
+                  className="w-9 h-9 rounded-full border-2 border-primary/30 flex-shrink-0"
+                />
+              ) : (
+                <div className="w-9 h-9 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm flex-shrink-0">
+                  {user?.firstName?.[0]}{user?.lastName?.[0]}
+                </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 truncate">{user?.firstName} {user?.lastName}</p>
-                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                <p className="text-sm font-medium text-sidebar-foreground truncate">
+                  {user?.firstName} {user?.lastName}
+                </p>
+                <p className="text-xs text-sidebar-foreground/50 truncate">{user?.email}</p>
               </div>
             </div>
-            <Button onClick={handleLogout} variant="outline" className="w-full">
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="w-full border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground bg-transparent"
+            >
               Logout
             </Button>
           </div>
@@ -106,5 +139,41 @@ export default function Sidebar({ appName = "YourApp", className }: SidebarProps
         )}
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Desktop: always visible fixed sidebar */}
+      <div className="hidden md:block fixed left-0 top-0 h-full w-64 z-40">
+        {sidebarContent}
+      </div>
+
+      {/* Mobile: overlay drawer with Framer Motion */}
+      <AnimatePresence>
+        {open && (
+          <>
+            <motion.div
+              key="backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden fixed inset-0 bg-black/50 z-40"
+              onClick={onClose}
+            />
+            <motion.div
+              key="drawer"
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 320 }}
+              className="md:hidden fixed left-0 top-0 h-full w-64 z-50"
+            >
+              {sidebarContent}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

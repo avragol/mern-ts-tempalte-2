@@ -14,8 +14,8 @@ const defaultLinks = [
   { label: "Contact", href: "#" },
 ];
 
-export default function Footer({ 
-  appName = "YourApp", 
+export default function Footer({
+  appName = "Golda",
   currentYear = new Date().getFullYear(),
   links = defaultLinks,
   className 

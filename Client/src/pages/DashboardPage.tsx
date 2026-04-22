@@ -45,12 +45,12 @@ export default function DashboardPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <Icon icon={LayoutDashboard} size="lg" className="text-blue-600" />
+            <Icon icon={LayoutDashboard} size="lg" className="text-primary" />
             <Heading level={1}>Dashboard</Heading>
           </div>
           <button
             onClick={() => navigate("/items/new")}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
           >
             <Plus className="w-4 h-4" />
             New Item
@@ -88,7 +88,7 @@ export default function DashboardPage() {
               <Heading level={3}>Recent Items</Heading>
               <button
                 onClick={() => navigate("/items")}
-                className="text-sm text-blue-600 hover:underline"
+                className="text-sm text-primary hover:underline"
               >
                 View all
               </button>

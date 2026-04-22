@@ -1,42 +1,119 @@
+import { useState, type FormEvent } from "react";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { Shield, Lock } from "lucide-react";
 import { Heading } from "@/components/Atoms/Heading";
 import { Text } from "@/components/Atoms/Text";
 import { Card } from "@/components/Atoms/Card";
-import { Shield, Lock, KeyRound } from "lucide-react";
 import { Icon } from "@/components/Atoms/Icon";
+import { Button } from "@/components/ui/button";
+import api from "@/services/api";
 
 export default function SecuritySettingsPage() {
-  const securityFeatures = [
-    { icon: Lock, title: "Password Management", description: "Change your password and manage password policies" },
-    { icon: Shield, title: "Two-Factor Authentication", description: "Enable 2FA for enhanced account security" },
-    { icon: KeyRound, title: "API Keys", description: "Manage your API keys and access tokens" },
-  ];
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [validationError, setValidationError] = useState("");
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (payload: { currentPassword: string; newPassword: string }) => {
+      const { data } = await api.post("/auth/change-password", payload);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Password changed successfully");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setValidationError("");
+    },
+    onError: (error: unknown) => {
+      const msg = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      toast.error(msg ?? "Failed to change password");
+    },
+  });
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setValidationError("");
+    if (newPassword.length < 8) {
+      setValidationError("New password must be at least 8 characters");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setValidationError("New passwords do not match");
+      return;
+    }
+    mutate({ currentPassword, newPassword });
+  };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <Icon icon={Shield} size="lg" className="text-blue-600" />
+        <div className="flex items-center gap-3 mb-2">
+          <Icon icon={Shield} size="lg" className="text-primary" />
           <Heading level={1}>Security Settings</Heading>
         </div>
-        <Text variant="lead" color="muted">
-          Manage your account security and authentication settings
-        </Text>
+        <Text variant="lead" color="muted">Manage your account security</Text>
       </div>
 
-      <div className="space-y-6">
-        {securityFeatures.map((feature, index) => (
-          <Card key={index} hover>
-            <div className="flex items-start gap-4">
-              <Icon icon={feature.icon} size="lg" className="text-blue-600 flex-shrink-0" />
-              <div>
-                <Heading level={3} className="mb-2">{feature.title}</Heading>
-                <Text color="muted">{feature.description}</Text>
-              </div>
+      <Card>
+        <div className="flex items-center gap-3 mb-6">
+          <Lock className="w-5 h-5 text-primary" />
+          <Heading level={3}>Change Password</Heading>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {validationError && (
+            <div className="bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-lg px-4 py-3">
+              {validationError}
             </div>
-          </Card>
-        ))}
-      </div>
+          )}
+
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">Current password</label>
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">New password</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+              minLength={8}
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
+              placeholder="Min. 8 characters"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-foreground mb-1">Confirm new password</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
+              placeholder="••••••••"
+            />
+          </div>
+
+          <div className="pt-2">
+            <Button type="submit" disabled={isPending}>
+              {isPending ? "Changing..." : "Change password"}
+            </Button>
+          </div>
+        </form>
+      </Card>
     </div>
   );
 }
-

@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router";
 import {
-  Shield,
-  Palette,
-  Code,
-  Database,
-  Zap,
-  Lock,
-  Rocket,
+  FileText,
+  Bookmark,
+  Code2,
+  Bot,
+  BookOpen,
   ArrowRight,
-  Github,
-  BookOpen
+  Search,
+  Tags,
+  Users,
+  Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/Atoms/Badge";
@@ -17,7 +17,6 @@ import { Heading } from "@/components/Atoms/Heading";
 import { Text } from "@/components/Atoms/Text";
 import { Icon } from "@/components/Atoms/Icon";
 import { FeatureCard } from "@/components/Molecules/FeatureCard";
-import { BenefitItem } from "@/components/Molecules/BenefitItem";
 import { Section } from "@/components/Molecules/Section";
 import { Hero } from "@/components/Molecules/Hero";
 import { useAppSelector } from "@/redux/hooks";
@@ -27,81 +26,75 @@ export default function HomePage() {
   const { user } = useAppSelector((state) => state.user);
   const isAuthenticated = !!user;
 
-  const features = [
+  const contentTypes = [
     {
-      icon: Shield,
-      title: "JWT Authentication",
-      description: "Complete self-hosted JWT-based authentication with automatic user creation and token management",
-      iconColor: "text-blue-600",
+      icon: FileText,
+      title: "Notes",
+      description: "Quick thoughts, meeting notes, and ideas — always within reach",
+      iconColor: "text-amber-600",
+      iconBgColor: "bg-amber-50",
+    },
+    {
+      icon: BookOpen,
+      title: "Articles",
+      description: "Long-form documents and research, richly formatted and searchable",
+      iconColor: "text-blue-700",
       iconBgColor: "bg-blue-50",
     },
     {
-      icon: Palette,
-      title: "Modern Design System",
-      description: "Modern design system with Tailwind CSS, Radix UI, and Framer Motion animations",
-      iconColor: "text-purple-600",
+      icon: Bookmark,
+      title: "Bookmarks",
+      description: "Save web links with context — no more lost tabs or forgotten URLs",
+      iconColor: "text-purple-700",
       iconBgColor: "bg-purple-50",
     },
     {
-      icon: Code,
-      title: "TypeScript First",
-      description: "Full type safety across frontend and backend with comprehensive TypeScript support",
-      iconColor: "text-indigo-600",
-      iconBgColor: "bg-indigo-50",
-    },
-    {
-      icon: Database,
-      title: "MongoDB Ready",
-      description: "Mongoose ODM with Zod validation, rate limiting, and comprehensive error handling",
-      iconColor: "text-green-600",
+      icon: Code2,
+      title: "Code Snippets",
+      description: "Store reusable code with language tagging and syntax highlighting",
+      iconColor: "text-green-700",
       iconBgColor: "bg-green-50",
     },
     {
-      icon: Zap,
-      title: "Lightning Fast",
-      description: "Vite-powered development with hot reload, React 19, and optimized production builds",
-      iconColor: "text-yellow-600",
-      iconBgColor: "bg-yellow-50",
+      icon: Bot,
+      title: "AI Rules & Skills",
+      description: "Organise your custom AI prompts, rules, and agent configurations",
+      iconColor: "text-orange-700",
+      iconBgColor: "bg-orange-50",
     },
     {
-      icon: Lock,
-      title: "Production Ready",
-      description: "Security features including rate limiting, CORS, JWT validation, and environment validation",
-      iconColor: "text-red-600",
-      iconBgColor: "bg-red-50",
+      icon: Tags,
+      title: "Tags & Full-Text Search",
+      description: "Find anything instantly — search across titles, content, and tags",
+      iconColor: "text-rose-700",
+      iconBgColor: "bg-rose-50",
     },
-  ];
-
-  const benefits = [
-    "Automatic user creation on registration",
-    "Protected routes with role-based access",
-    "Comprehensive design system documentation",
-    "Docker support for easy deployment",
-    "Hot reload in development",
-    "Production-ready configurations",
   ];
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
+      {/* Hero */}
       <Hero
         badge={
-          <Badge variant="default" className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full">
-            <Icon icon={Rocket} size="sm" className="text-blue-600" />
-            <span>Production-Ready Template</span>
+          <Badge
+            variant="default"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-primary/20"
+          >
+            <Icon icon={Sparkles} size="sm" className="text-primary" />
+            <span className="text-foreground/80">Your team's knowledge, organised</span>
           </Badge>
         }
         title={
           <>
-            <Heading level={1} className="mb-6">
-              MERN Stack Template
+            <Heading level={1} className="mb-3">
+              One place for
             </Heading>
             <Heading level={1} gradient>
-              with JWT Auth
+              everything you know
             </Heading>
           </>
         }
-        description="A modern, production-ready MERN (MongoDB, Express, React, Node.js) stack template with self-hosted JWT authentication and a clean modern design system."
+        description="Golda is a personal and team knowledge base for notes, articles, bookmarks, code snippets, and AI rules — all searchable, tagged, and always with you."
         actions={
           <>
             {!isAuthenticated ? (
@@ -110,7 +103,7 @@ export default function HomePage() {
                 size="lg"
                 className="text-lg px-8 py-6"
               >
-                Get Started
+                Get started free
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             ) : (
@@ -119,133 +112,110 @@ export default function HomePage() {
                 size="lg"
                 className="text-lg px-8 py-6"
               >
-                Explore Dashboard
+                Open knowledge base
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             )}
-            <Button
-              variant="outline"
-              size="lg"
-              className="text-lg px-8 py-6"
-              onClick={() => window.open("https://github.com", "_blank")}
-            >
-              <Icon icon={Github} size="md" className="mr-2" />
-              View on GitHub
-            </Button>
+            {!isAuthenticated && (
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-lg px-8 py-6"
+                onClick={() => navigate("/login")}
+              >
+                Sign in
+              </Button>
+            )}
           </>
         }
       />
 
-      {/* Features Section */}
+      {/* Content Types */}
       <Section
-        title="Everything You Need"
-        subtitle="Built with modern best practices and production-ready features"
+        title="Everything in one place"
+        subtitle="Five content types, one unified workspace"
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => (
+          {contentTypes.map((item, i) => (
             <FeatureCard
-              key={index}
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-              iconColor={feature.iconColor}
-              iconBgColor={feature.iconBgColor}
+              key={i}
+              icon={item.icon}
+              title={item.title}
+              description={item.description}
+              iconColor={item.iconColor}
+              iconBgColor={item.iconBgColor}
             />
           ))}
         </div>
       </Section>
 
-      {/* Benefits Section */}
-      <Section title="Why Choose This Template?">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <Heading level={2} className="mb-6">
-              Why Choose This Template?
-            </Heading>
-            <Text variant="lead" color="muted" className="mb-8">
-              Start building your application immediately with a solid foundation
-              that includes authentication, state management, and a beautiful UI.
-            </Text>
-            <ul className="space-y-4">
-              {benefits.map((benefit, index) => (
-                <BenefitItem key={index} text={benefit} />
-              ))}
-            </ul>
-          </div>
-          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-8 text-white">
-            <Heading level={3} className="mb-4 text-white">
-              Quick Start
-            </Heading>
-            <div className="space-y-3 font-mono text-sm bg-black/20 rounded-lg p-4 backdrop-blur-sm">
-              <div>
-                <span className="text-blue-300">$</span> git clone https://github.com/...
+      {/* Benefits */}
+      <Section title="Built for teams and individuals">
+        <div className="grid md:grid-cols-3 gap-8">
+          {[
+            {
+              icon: Search,
+              title: "Instant search",
+              desc: "Full-text search across all your content — find anything in seconds",
+            },
+            {
+              icon: Users,
+              title: "Team-ready",
+              desc: "Share knowledge with your team. Role-based access keeps things organised",
+            },
+            {
+              icon: Tags,
+              title: "Smart tagging",
+              desc: "Tag your content and filter by type, tag, or date to find what you need",
+            },
+          ].map(({ icon, title, desc }) => (
+            <div key={title} className="text-center">
+              <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Icon icon={icon} size="lg" className="text-primary" />
               </div>
-              <div>
-                <span className="text-blue-300">$</span> cd mern-ts-template
-              </div>
-              <div>
-                <span className="text-blue-300">$</span> npm install
-              </div>
-              <div>
-                <span className="text-blue-300">$</span> npm run dev
-              </div>
+              <Heading level={3} className="mb-2">
+                {title}
+              </Heading>
+              <Text color="muted">{desc}</Text>
             </div>
-            <Text variant="body" className="mt-4 text-blue-100">
-              Get up and running in minutes, not hours.
-            </Text>
-          </div>
+          ))}
         </div>
       </Section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-to-r from-blue-600 to-blue-700">
-        <div className="max-w-4xl mx-auto text-center">
-          <Heading level={2} className="mb-4 text-white">
-            Ready to Build Something Amazing?
+      {/* CTA */}
+      <section className="py-20 px-6 bg-secondary">
+        <div className="max-w-3xl mx-auto text-center">
+          <Heading level={2} className="mb-4 text-secondary-foreground">
+            Ready to organise your knowledge?
           </Heading>
-          <Text variant="lead" className="mb-8 text-blue-100">
-            Start your next project with a production-ready foundation
+          <Text variant="lead" className="mb-8 text-secondary-foreground/70">
+            Start capturing, organising, and sharing what you know.
           </Text>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {!isAuthenticated ? (
-              <Button
-                onClick={() => navigate("/register")}
-                size="lg"
-                variant="secondary"
-                className="text-lg px-8 py-6 bg-white text-blue-600 hover:bg-gray-100"
-              >
-                Get Started Now
-                <Icon icon={ArrowRight} size="md" className="ml-2" />
-              </Button>
-            ) : (
-              <Button
-                onClick={() => navigate("/items")}
-                size="lg"
-                variant="secondary"
-                className="text-lg px-8 py-6 bg-white text-blue-600 hover:bg-gray-100"
-              >
-                Go to Dashboard
-                <Icon icon={ArrowRight} size="md" className="ml-2" />
-              </Button>
-            )}
+          {!isAuthenticated ? (
             <Button
+              onClick={() => navigate("/register")}
               size="lg"
-              variant="outline"
-              className="text-lg px-8 py-6 border-2 border-white text-white hover:bg-white/10"
-              onClick={() => window.open("#", "_blank")}
+              className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              <Icon icon={BookOpen} size="md" className="mr-2" />
-              Read Documentation
+              Create your free account
+              <Icon icon={ArrowRight} size="md" className="ml-2" />
             </Button>
-          </div>
+          ) : (
+            <Button
+              onClick={() => navigate("/items")}
+              size="lg"
+              className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              Go to my knowledge base
+              <Icon icon={ArrowRight} size="md" className="ml-2" />
+            </Button>
+          )}
         </div>
       </section>
     </div>
   );
-};
+}
 
 export const HomePageLoader = async () => {
-  return {
-    message: "Welcome to MERN Stack Template",
-  };
+  return { message: "Welcome to Golda" };
 };

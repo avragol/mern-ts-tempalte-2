@@ -42,6 +42,31 @@ class AuthController {
         if (!user) throw new AppError("User not found", 404);
         res.status(200).json({ success: true, data: user });
     }
+
+    async changePassword(req: Request, res: Response) {
+        const userId = req.userId;
+        if (!userId) throw new AppError("Unauthorized", 401);
+
+        const { currentPassword, newPassword } = req.body as { currentPassword?: unknown; newPassword?: unknown };
+
+        if (typeof currentPassword !== 'string' || !currentPassword) {
+            throw new AppError("Current password is required", 400);
+        }
+        if (typeof newPassword !== 'string' || newPassword.length < 8) {
+            throw new AppError("New password must be at least 8 characters", 400);
+        }
+
+        const user = await User.findById(userId).select('+password');
+        if (!user) throw new AppError("User not found", 404);
+
+        const match = await bcrypt.compare(currentPassword, user.password);
+        if (!match) throw new AppError("Current password is incorrect", 401);
+
+        user.password = await bcrypt.hash(newPassword, 12);
+        await user.save();
+
+        res.status(200).json({ success: true, message: "Password changed successfully" });
+    }
 }
 
 export default AuthController;
