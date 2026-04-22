@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "home": "Home",
+    "profile": "Profile",
+    "viewProfile": "View Profile",
+    "settings": "Settings",
+    "preferences": "Preferences",
+    "knowledgeBase": "Knowledge Base",
+    "allItems": "All Items",
+    "newItem": "New Item",
+    "dashboard": "Dashboard",
+    "overview": "Overview",
+    "general": "General",
+    "security": "Security",
+    "notifications": "Notifications",
+    "logout": "Logout",
+    "login": "Login"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your account",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Sign in",
+      "loading": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "createOne": "Create one"
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Start managing your knowledge",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "password": "Password",
+      "passwordPlaceholder": "Min. 8 characters",
+      "submit": "Create account",
+      "loading": "Creating account...",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Your knowledge base at a glance.",
+    "newItem": "New Item",
+    "recentItems": "Recent Items",
+    "viewAll": "View all",
+    "noItems": "No items yet. Create your first one!",
+    "quickActions": "Quick Actions"
+  },
+  "home": {
+    "badge": "Your team's knowledge, organised",
+    "title1": "One place for",
+    "title2": "everything you know",
+    "description": "Golda is a personal and team knowledge base for notes, articles, bookmarks, code snippets, and AI rules — all searchable, tagged, and always with you.",
+    "getStarted": "Get started free",
+    "openKnowledgeBase": "Open knowledge base",
+    "signIn": "Sign in",
+    "everythingTitle": "Everything in one place",
+    "everythingSubtitle": "Five content types, one unified workspace",
+    "builtForTeams": "Built for teams and individuals",
+    "ctaTitle": "Ready to organise your knowledge?",
+    "ctaSubtitle": "Start capturing, organising, and sharing what you know.",
+    "createAccount": "Create your free account",
+    "goToKnowledgeBase": "Go to my knowledge base",
+    "features": {
+      "notes": { "title": "Notes", "desc": "Quick thoughts, meeting notes, and ideas — always within reach" },
+      "articles": { "title": "Articles", "desc": "Long-form documents and research, richly formatted and searchable" },
+      "bookmarks": { "title": "Bookmarks", "desc": "Save web links with context — no more lost tabs or forgotten URLs" },
+      "snippets": { "title": "Code Snippets", "desc": "Store reusable code with language tagging and syntax highlighting" },
+      "aiRules": { "title": "AI Rules & Skills", "desc": "Organise your custom AI prompts, rules, and agent configurations" },
+      "search": { "title": "Tags & Full-Text Search", "desc": "Find anything instantly — search across titles, content, and tags" }
+    },
+    "benefits": {
+      "search": { "title": "Instant search", "desc": "Full-text search across all your content — find anything in seconds" },
+      "teams": { "title": "Team-ready", "desc": "Share knowledge with your team. Role-based access keeps things organised" },
+      "tags": { "title": "Smart tagging", "desc": "Tag your content and filter by type, tag, or date to find what you need" }
+    }
+  },
+  "settings": {
+    "profile": {
+      "title": "Profile Settings",
+      "subtitle": "Update your personal information",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "emailNote": "Email cannot be changed",
+      "phone": "Phone (optional)",
+      "profilePicture": "Profile picture URL (optional)",
+      "save": "Save changes",
+      "saving": "Saving...",
+      "success": "Profile updated successfully",
+      "error": "Failed to update profile"
+    },
+    "security": {
+      "title": "Security Settings",
+      "subtitle": "Manage your account security",
+      "changePassword": "Change Password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Change password",
+      "submitting": "Changing...",
+      "success": "Password changed successfully",
+      "minLength": "New password must be at least 8 characters",
+      "noMatch": "New passwords do not match"
+    },
+    "general": {
+      "title": "General Settings",
+      "subtitle": "Application preferences",
+      "language": "Language",
+      "languageNote": "Switching language also changes text direction (RTL for Hebrew).",
+      "save": "Save preference",
+      "success": "Language updated",
+      "english": "English",
+      "hebrew": "עברית (Hebrew)"
+    },
+    "notifications": {
+      "title": "Notification Settings",
+      "subtitle": "Choose how you want to be notified",
+      "emailSharedItem": "Shared item alerts",
+      "emailSharedItemDesc": "Get notified when someone shares a knowledge item with you",
+      "browserNotifications": "Browser notifications",
+      "browserNotificationsDesc": "Receive push notifications in your browser",
+      "weeklyDigest": "Weekly digest",
+      "weeklyDigestDesc": "A weekly summary of new items in your knowledge base",
+      "save": "Save preferences",
+      "success": "Notification preferences saved"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "subtitle": "Customise how Golda looks and behaves for you",
+      "defaultView": "Default View",
+      "list": "List",
+      "grid": "Grid",
+      "itemsPerPage": "Items per page",
+      "save": "Save preferences",
+      "success": "Preferences saved"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "back": "Back"
+  }
+}

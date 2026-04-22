@@ -1,3 +1,4 @@
+import "./i18n"; // must be imported before anything that uses translations
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

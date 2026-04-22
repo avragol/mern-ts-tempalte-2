@@ -2,12 +2,31 @@ import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import { logout } from "@/redux/slices/userSlice";
 import { getSidebarMenuItems, routeConfig } from "@/config/routesConfig";
 import type { SidebarMenuItem, SidebarSubMenuItem } from "@/config/routesConfig";
 import { MenuItem } from "@/components/Molecules/MenuItem";
+import { LanguageToggle } from "@/components/Molecules/LanguageToggle";
+
+// Maps English route names → translation keys
+const NAV_KEY: Record<string, string> = {
+  "Home": "nav.home",
+  "Profile": "nav.profile",
+  "View Profile": "nav.viewProfile",
+  "Settings": "nav.settings",
+  "Preferences": "nav.preferences",
+  "Knowledge Base": "nav.knowledgeBase",
+  "All Items": "nav.allItems",
+  "New Item": "nav.newItem",
+  "Dashboard": "nav.dashboard",
+  "Overview": "nav.overview",
+  "General": "nav.general",
+  "Security": "nav.security",
+  "Notifications": "nav.notifications",
+};
 
 export interface SidebarProps {
   open?: boolean;
@@ -21,6 +40,7 @@ export default function Sidebar({ open = false, onClose, className }: SidebarPro
   const { user } = useAppSelector((state) => state.user);
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set());
+  const { t } = useTranslation();
 
   const isAuthenticated = !!user;
 
@@ -41,6 +61,9 @@ export default function Sidebar({ open = false, onClose, className }: SidebarPro
     isAuthenticated,
     user?.role
   );
+
+  const translateLabel = (label: string) =>
+    NAV_KEY[label] ? t(NAV_KEY[label]) : label;
 
   const isActive = (path?: string) => {
     if (!path) return false;
@@ -89,10 +112,13 @@ export default function Sidebar({ open = false, onClose, className }: SidebarPro
             return (
               <MenuItem
                 key={item.label}
-                label={item.label}
+                label={translateLabel(item.label)}
                 path={item.path}
                 icon={item.icon}
-                subMenus={item.subMenus?.map((sub) => ({ label: sub.label, path: sub.path }))}
+                subMenus={item.subMenus?.map((sub) => ({
+                  label: translateLabel(sub.label),
+                  path: sub.path,
+                }))}
                 isExpanded={isExpanded}
                 isActive={isItemActive}
                 onToggle={() => toggleMenu(item.label)}
@@ -102,7 +128,11 @@ export default function Sidebar({ open = false, onClose, className }: SidebarPro
         </ul>
       </nav>
 
-      <div className="border-t border-sidebar-border p-4">
+      <div className="border-t border-sidebar-border p-4 space-y-3">
+        <div className="flex justify-start">
+          <LanguageToggle />
+        </div>
+
         {isAuthenticated ? (
           <div className="space-y-3">
             <div className="flex items-center gap-3 px-1">
@@ -129,12 +159,12 @@ export default function Sidebar({ open = false, onClose, className }: SidebarPro
               variant="outline"
               className="w-full border-sidebar-border text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground bg-transparent"
             >
-              Logout
+              {t("nav.logout")}
             </Button>
           </div>
         ) : (
           <Button onClick={() => navigate("/login")} className="w-full">
-            Login
+            {t("nav.login")}
           </Button>
         )}
       </div>
