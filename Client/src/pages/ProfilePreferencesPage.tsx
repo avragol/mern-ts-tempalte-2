@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Sliders, LayoutGrid, List } from "lucide-react";
 import { Heading } from "@/components/Atoms/Heading";
 import { Text } from "@/components/Atoms/Text";
@@ -28,11 +29,12 @@ function loadPrefs(): DisplayPrefs {
 }
 
 export default function ProfilePreferencesPage() {
+  const { t } = useTranslation();
   const [prefs, setPrefs] = useState<DisplayPrefs>(loadPrefs);
 
   const handleSave = () => {
     localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
-    toast.success("Preferences saved");
+    toast.success(t("settings.preferences.success"));
   };
 
   return (
@@ -40,17 +42,17 @@ export default function ProfilePreferencesPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Icon icon={Sliders} size="lg" className="text-primary" />
-          <Heading level={1}>Preferences</Heading>
+          <Heading level={1}>{t("settings.preferences.title")}</Heading>
         </div>
         <Text variant="lead" color="muted">
-          Customise how Golda looks and behaves for you
+          {t("settings.preferences.subtitle")}
         </Text>
       </div>
 
       <div className="space-y-6">
         <Card>
           <Heading level={3} className="mb-5">
-            Default View
+            {t("settings.preferences.defaultView")}
           </Heading>
           <div className="flex gap-3">
             {(["list", "grid"] as const).map((view) => (
@@ -69,7 +71,7 @@ export default function ProfilePreferencesPage() {
                 ) : (
                   <LayoutGrid className="w-4 h-4" />
                 )}
-                {view === "list" ? "List" : "Grid"}
+                {view === "list" ? t("settings.preferences.list") : t("settings.preferences.grid")}
               </button>
             ))}
           </div>
@@ -77,7 +79,7 @@ export default function ProfilePreferencesPage() {
 
         <Card>
           <Heading level={3} className="mb-5">
-            Items per page
+            {t("settings.preferences.itemsPerPage")}
           </Heading>
           <div className="flex gap-3">
             {([10, 25, 50] as const).map((n) => (
@@ -97,7 +99,7 @@ export default function ProfilePreferencesPage() {
           </div>
         </Card>
 
-        <Button onClick={handleSave}>Save preferences</Button>
+        <Button onClick={handleSave}>{t("settings.preferences.save")}</Button>
       </div>
     </div>
   );

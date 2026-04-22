@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import { Settings, Save } from "lucide-react";
 import { Heading } from "@/components/Atoms/Heading";
@@ -14,6 +15,7 @@ import api from "@/services/api";
 export default function ProfileSettingsPage() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
+  const { t } = useTranslation();
 
   const [firstName, setFirstName] = useState(user?.firstName ?? "");
   const [lastName, setLastName] = useState(user?.lastName ?? "");
@@ -27,10 +29,10 @@ export default function ProfileSettingsPage() {
     },
     onSuccess: (updatedUser) => {
       dispatch(setUser(updatedUser));
-      toast.success("Profile updated successfully");
+      toast.success(t("settings.profile.success"));
     },
     onError: () => {
-      toast.error("Failed to update profile");
+      toast.error(t("settings.profile.error"));
     },
   });
 
@@ -49,16 +51,18 @@ export default function ProfileSettingsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Icon icon={Settings} size="lg" className="text-primary" />
-          <Heading level={1}>Profile Settings</Heading>
+          <Heading level={1}>{t("settings.profile.title")}</Heading>
         </div>
-        <Text variant="lead" color="muted">Update your personal information</Text>
+        <Text variant="lead" color="muted">{t("settings.profile.subtitle")}</Text>
       </div>
 
       <Card>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">First name</label>
+              <label className="block text-sm font-medium text-foreground mb-1">
+                {t("settings.profile.firstName")}
+              </label>
               <input
                 type="text"
                 value={firstName}
@@ -68,7 +72,9 @@ export default function ProfileSettingsPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground mb-1">Last name</label>
+              <label className="block text-sm font-medium text-foreground mb-1">
+                {t("settings.profile.lastName")}
+              </label>
               <input
                 type="text"
                 value={lastName}
@@ -80,18 +86,24 @@ export default function ProfileSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Email</label>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              {t("settings.profile.email")}
+            </label>
             <input
               type="email"
               value={user.email}
               disabled
               className="w-full px-3 py-2 border border-border rounded-lg text-sm bg-muted text-muted-foreground cursor-not-allowed"
             />
-            <Text variant="small" color="muted" className="mt-1">Email cannot be changed</Text>
+            <Text variant="small" color="muted" className="mt-1">
+              {t("settings.profile.emailNote")}
+            </Text>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Phone (optional)</label>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              {t("settings.profile.phone")}
+            </label>
             <input
               type="tel"
               value={phone}
@@ -102,7 +114,9 @@ export default function ProfileSettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Profile picture URL (optional)</label>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              {t("settings.profile.profilePicture")}
+            </label>
             <input
               type="url"
               value={profilePicture}
@@ -115,7 +129,7 @@ export default function ProfileSettingsPage() {
           <div className="pt-2">
             <Button type="submit" disabled={isPending} className="flex items-center gap-2">
               <Save className="w-4 h-4" />
-              {isPending ? "Saving..." : "Save changes"}
+              {isPending ? t("settings.profile.saving") : t("settings.profile.save")}
             </Button>
           </div>
         </form>

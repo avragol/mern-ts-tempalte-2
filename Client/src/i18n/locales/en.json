@@ -48,7 +48,105 @@
     "recentItems": "Recent Items",
     "viewAll": "View all",
     "noItems": "No items yet. Create your first one!",
-    "quickActions": "Quick Actions"
+    "quickActions": "Quick Actions",
+    "new": "New"
+  },
+  "items": {
+    "types": {
+      "note": "Notes",
+      "article": "Articles",
+      "snippet": "Snippets",
+      "bookmark": "Bookmarks",
+      "aiRule": "AI Rules"
+    },
+    "typesSingular": {
+      "note": "Note",
+      "article": "Article",
+      "snippet": "Code Snippet",
+      "bookmark": "Bookmark",
+      "aiRule": "AI Rule/Skill"
+    },
+    "typeDesc": {
+      "note": "Quick thoughts and ideas",
+      "article": "Long-form content",
+      "snippet": "Reusable code blocks",
+      "bookmark": "Save a URL for later",
+      "aiRule": "Prompts and AI instructions"
+    },
+    "new": "New",
+    "page": {
+      "title": "Knowledge Base",
+      "count_one": "{{count}} item in your knowledge base",
+      "count_other": "{{count}} items in your knowledge base",
+      "count_zero": "No items in your knowledge base yet",
+      "searchPlaceholder": "Search by title, content, or tags…",
+      "noItems": "No items found",
+      "noItemsFilter": "Try adjusting your filters.",
+      "noItemsCreate": "Create your first item to get started.",
+      "createItem": "Create Item",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {{page}} of {{total}}",
+      "failed": "Failed to load items. Please try again."
+    }
+  },
+  "itemForm": {
+    "newItem": "New Item",
+    "editItem": "Edit Item",
+    "backToKnowledgeBase": "Knowledge Base",
+    "backToItem": "Back to Item",
+    "itemType": "Item Type",
+    "title": "Title",
+    "titleRequired": "Title is required",
+    "titlePlaceholder": "Give your item a clear title",
+    "url": "URL",
+    "language": "Language",
+    "selectLanguage": "Select language",
+    "platform": "Platform",
+    "selectPlatform": "Select platform",
+    "content": "Content",
+    "tags": "Tags",
+    "tagsPlaceholder": "Add tags (press Enter or comma)",
+    "attachments": "Attachments",
+    "makePublic": "Make Public",
+    "makePublicDesc": "Visible to all team members",
+    "cancel": "Cancel",
+    "save": "Save Changes",
+    "create": "Create Item",
+    "saving": "Saving…",
+    "created": "Item created",
+    "updated": "Item updated",
+    "createFailed": "Failed to create item",
+    "updateFailed": "Failed to update item"
+  },
+  "itemDetail": {
+    "backToKnowledgeBase": "Knowledge Base",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Delete this item? This cannot be undone.",
+    "deleted": "Item deleted",
+    "deleteFailed": "Failed to delete item",
+    "notFound": "Item not found.",
+    "backLink": "Back to Knowledge Base",
+    "public": "Public",
+    "private": "Private",
+    "attachments": "Attachments",
+    "platform": "Platform: {{platform}}"
+  },
+  "profile": {
+    "title": "Profile",
+    "loginRequired": "Please log in to view your profile.",
+    "userId": "User ID",
+    "lastUpdated": "Last Updated",
+    "role": "Role",
+    "createdAt": "Created At",
+    "phone": "Phone"
+  },
+  "footer": {
+    "allRights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact"
   },
   "home": {
     "badge": "Your team's knowledge, organised",

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import { Shield, Lock } from "lucide-react";
 import { Heading } from "@/components/Atoms/Heading";
@@ -10,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import api from "@/services/api";
 
 export default function SecuritySettingsPage() {
+  const { t } = useTranslation();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -21,7 +23,7 @@ export default function SecuritySettingsPage() {
       return data;
     },
     onSuccess: () => {
-      toast.success("Password changed successfully");
+      toast.success(t("settings.security.success"));
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
@@ -29,7 +31,7 @@ export default function SecuritySettingsPage() {
     },
     onError: (error: unknown) => {
       const msg = (error as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      toast.error(msg ?? "Failed to change password");
+      toast.error(msg ?? t("settings.security.success"));
     },
   });
 
@@ -37,11 +39,11 @@ export default function SecuritySettingsPage() {
     e.preventDefault();
     setValidationError("");
     if (newPassword.length < 8) {
-      setValidationError("New password must be at least 8 characters");
+      setValidationError(t("settings.security.minLength"));
       return;
     }
     if (newPassword !== confirmPassword) {
-      setValidationError("New passwords do not match");
+      setValidationError(t("settings.security.noMatch"));
       return;
     }
     mutate({ currentPassword, newPassword });
@@ -52,15 +54,15 @@ export default function SecuritySettingsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Icon icon={Shield} size="lg" className="text-primary" />
-          <Heading level={1}>Security Settings</Heading>
+          <Heading level={1}>{t("settings.security.title")}</Heading>
         </div>
-        <Text variant="lead" color="muted">Manage your account security</Text>
+        <Text variant="lead" color="muted">{t("settings.security.subtitle")}</Text>
       </div>
 
       <Card>
         <div className="flex items-center gap-3 mb-6">
           <Lock className="w-5 h-5 text-primary" />
-          <Heading level={3}>Change Password</Heading>
+          <Heading level={3}>{t("settings.security.changePassword")}</Heading>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -71,7 +73,9 @@ export default function SecuritySettingsPage() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Current password</label>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              {t("settings.security.currentPassword")}
+            </label>
             <input
               type="password"
               value={currentPassword}
@@ -83,7 +87,9 @@ export default function SecuritySettingsPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">New password</label>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              {t("settings.security.newPassword")}
+            </label>
             <input
               type="password"
               value={newPassword}
@@ -91,12 +97,14 @@ export default function SecuritySettingsPage() {
               required
               minLength={8}
               className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
-              placeholder="Min. 8 characters"
+              placeholder={t("auth.register.passwordPlaceholder")}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Confirm new password</label>
+            <label className="block text-sm font-medium text-foreground mb-1">
+              {t("settings.security.confirmPassword")}
+            </label>
             <input
               type="password"
               value={confirmPassword}
@@ -109,7 +117,7 @@ export default function SecuritySettingsPage() {
 
           <div className="pt-2">
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Changing..." : "Change password"}
+              {isPending ? t("settings.security.submitting") : t("settings.security.submit")}
             </Button>
           </div>
         </form>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Bell, Mail, Rss } from "lucide-react";
 import { Heading } from "@/components/Atoms/Heading";
 import { Text } from "@/components/Atoms/Text";
@@ -30,6 +31,7 @@ function loadPrefs(): NotifPrefs {
 }
 
 export default function NotificationsSettingsPage() {
+  const { t } = useTranslation();
   const [prefs, setPrefs] = useState<NotifPrefs>(loadPrefs);
 
   const toggle = (key: keyof NotifPrefs) => {
@@ -38,32 +40,32 @@ export default function NotificationsSettingsPage() {
 
   const handleSave = () => {
     localStorage.setItem(PREFS_KEY, JSON.stringify(prefs));
-    toast.success("Notification preferences saved");
+    toast.success(t("settings.notifications.success"));
   };
 
   const items: Array<{
     key: keyof NotifPrefs;
     icon: typeof Mail;
-    label: string;
-    desc: string;
+    labelKey: string;
+    descKey: string;
   }> = [
     {
       key: "emailSharedItem",
       icon: Mail,
-      label: "Shared item alerts",
-      desc: "Get notified when someone shares a knowledge item with you",
+      labelKey: "settings.notifications.emailSharedItem",
+      descKey: "settings.notifications.emailSharedItemDesc",
     },
     {
       key: "browserNotifications",
       icon: Bell,
-      label: "Browser notifications",
-      desc: "Receive push notifications in your browser",
+      labelKey: "settings.notifications.browserNotifications",
+      descKey: "settings.notifications.browserNotificationsDesc",
     },
     {
       key: "weeklyDigest",
       icon: Rss,
-      label: "Weekly digest",
-      desc: "A weekly summary of new items in your knowledge base",
+      labelKey: "settings.notifications.weeklyDigest",
+      descKey: "settings.notifications.weeklyDigestDesc",
     },
   ];
 
@@ -72,16 +74,16 @@ export default function NotificationsSettingsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Icon icon={Bell} size="lg" className="text-primary" />
-          <Heading level={1}>Notification Settings</Heading>
+          <Heading level={1}>{t("settings.notifications.title")}</Heading>
         </div>
         <Text variant="lead" color="muted">
-          Choose how you want to be notified
+          {t("settings.notifications.subtitle")}
         </Text>
       </div>
 
       <Card>
         <div className="divide-y divide-border">
-          {items.map(({ key, icon: ItemIcon, label, desc }) => (
+          {items.map(({ key, icon: ItemIcon, labelKey, descKey }) => (
             <div
               key={key}
               className="flex items-center justify-between py-4 first:pt-0 last:pb-0"
@@ -89,9 +91,9 @@ export default function NotificationsSettingsPage() {
               <div className="flex items-start gap-3">
                 <ItemIcon className="w-5 h-5 text-muted-foreground mt-0.5 flex-shrink-0" />
                 <div>
-                  <Text className="font-medium">{label}</Text>
+                  <Text className="font-medium">{t(labelKey)}</Text>
                   <Text variant="small" color="muted">
-                    {desc}
+                    {t(descKey)}
                   </Text>
                 </div>
               </div>
@@ -115,7 +117,7 @@ export default function NotificationsSettingsPage() {
         </div>
 
         <div className="mt-6 pt-4 border-t border-border">
-          <Button onClick={handleSave}>Save preferences</Button>
+          <Button onClick={handleSave}>{t("settings.notifications.save")}</Button>
         </div>
       </Card>
     </div>

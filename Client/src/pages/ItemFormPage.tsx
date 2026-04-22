@@ -1,6 +1,7 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { ArrowLeft, Save, FileText, BookOpen, Code2, Bookmark, Bot } from "lucide-react";
 import { Heading } from "@/components/Atoms/Heading";
 import { Text } from "@/components/Atoms/Text";
@@ -13,12 +14,12 @@ import { createItem, updateItem, getItemById, getTags } from "@/services/items";
 import type { ItemType, CreateItemPayload, IItem } from "@/types/itemsTypes";
 import toast from "react-hot-toast";
 
-const TYPE_OPTIONS: { value: ItemType; label: string; icon: typeof FileText; description: string }[] = [
-  { value: "note", label: "Note", icon: FileText, description: "Quick thoughts and ideas" },
-  { value: "article", label: "Article", icon: BookOpen, description: "Long-form content" },
-  { value: "snippet", label: "Code Snippet", icon: Code2, description: "Reusable code blocks" },
-  { value: "bookmark", label: "Bookmark", icon: Bookmark, description: "Save a URL for later" },
-  { value: "ai-rule", label: "AI Rule/Skill", icon: Bot, description: "Prompts and AI instructions" },
+const TYPE_OPTIONS: { value: ItemType; icon: typeof FileText; labelKey: string; descKey: string }[] = [
+  { value: "note", icon: FileText, labelKey: "items.typesSingular.note", descKey: "items.typeDesc.note" },
+  { value: "article", icon: BookOpen, labelKey: "items.typesSingular.article", descKey: "items.typeDesc.article" },
+  { value: "snippet", icon: Code2, labelKey: "items.typesSingular.snippet", descKey: "items.typeDesc.snippet" },
+  { value: "bookmark", icon: Bookmark, labelKey: "items.typesSingular.bookmark", descKey: "items.typeDesc.bookmark" },
+  { value: "ai-rule", icon: Bot, labelKey: "items.typesSingular.aiRule", descKey: "items.typeDesc.aiRule" },
 ];
 
 const SNIPPET_LANGUAGES = ["typescript", "javascript", "python", "rust", "go", "java", "css", "html", "sql", "bash", "other"];
@@ -31,6 +32,7 @@ interface ItemFormPageProps {
 export default function ItemFormPage({ editId }: ItemFormPageProps) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const initialType = searchParams.get("type") as ItemType | null;
 
@@ -72,10 +74,10 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
     onSuccess: (item: IItem) => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["tags"] });
-      toast.success("Item created");
+      toast.success(t("itemForm.created"));
       navigate(`/items/${item._id}`);
     },
-    onError: () => toast.error("Failed to create item"),
+    onError: () => toast.error(t("itemForm.createFailed")),
   });
 
   const updateMutation = useMutation({
@@ -84,10 +86,10 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
       queryClient.invalidateQueries({ queryKey: ["items"] });
       queryClient.invalidateQueries({ queryKey: ["item", editId] });
       queryClient.invalidateQueries({ queryKey: ["tags"] });
-      toast.success("Item updated");
+      toast.success(t("itemForm.updated"));
       navigate(`/items/${item._id}`);
     },
-    onError: () => toast.error("Failed to update item"),
+    onError: () => toast.error(t("itemForm.updateFailed")),
   });
 
   const isPending = createMutation.isPending || updateMutation.isPending;
@@ -95,7 +97,7 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (!title.trim()) {
-      toast.error("Title is required");
+      toast.error(t("itemForm.titleRequired"));
       return;
     }
     const payload: CreateItemPayload = {
@@ -115,23 +117,25 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-3xl mx-auto px-4 py-6">
       <div className="flex items-center gap-2 mb-6">
         <button
           onClick={() => navigate(isEditing ? `/items/${editId}` : "/items")}
-          className="flex items-center gap-1 text-gray-500 hover:text-gray-700 text-sm"
+          className="flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm"
         >
           <ArrowLeft className="w-4 h-4" />
-          {isEditing ? "Back to Item" : "Knowledge Base"}
+          {isEditing ? t("itemForm.backToItem") : t("itemForm.backToKnowledgeBase")}
         </button>
       </div>
 
-      <Heading level={1} className="mb-6">{isEditing ? "Edit Item" : "New Item"}</Heading>
+      <Heading level={1} className="mb-6">
+        {isEditing ? t("itemForm.editItem") : t("itemForm.newItem")}
+      </Heading>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {!isEditing && (
           <Card variant="outlined">
-            <Text className="font-medium mb-3">Item Type</Text>
+            <Text className="font-medium mb-3">{t("itemForm.itemType")}</Text>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
               {TYPE_OPTIONS.map((opt) => (
                 <button
@@ -140,13 +144,20 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
                   onClick={() => setType(opt.value)}
                   className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 transition-colors ${
                     type === opt.value
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary bg-primary/10"
+                      : "border-border hover:border-border/80"
                   }`}
                 >
-                  <Icon icon={opt.icon} size="md" className={type === opt.value ? "text-blue-600" : "text-gray-500"} />
-                  <Text variant="small" className={`text-center font-medium ${type === opt.value ? "text-blue-700" : ""}`}>
-                    {opt.label}
+                  <Icon
+                    icon={opt.icon}
+                    size="md"
+                    className={type === opt.value ? "text-primary" : "text-muted-foreground"}
+                  />
+                  <Text
+                    variant="small"
+                    className={`text-center font-medium ${type === opt.value ? "text-primary" : ""}`}
+                  >
+                    {t(opt.labelKey)}
                   </Text>
                 </button>
               ))}
@@ -156,40 +167,40 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
 
         <Card variant="outlined">
           <label className="block">
-            <Text className="font-medium mb-1">Title *</Text>
+            <Text className="font-medium mb-1">{t("itemForm.title")} *</Text>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Give your item a clear title"
+              placeholder={t("itemForm.titlePlaceholder")}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
             />
           </label>
         </Card>
 
         {type === "bookmark" && (
           <Card variant="outlined">
-            <Text className="font-medium mb-1">URL</Text>
+            <Text className="font-medium mb-1">{t("itemForm.url")}</Text>
             <input
               type="url"
               value={metadata.url ?? ""}
               onChange={(e) => setMetadata((m) => ({ ...m, url: e.target.value }))}
               placeholder="https://example.com"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
             />
           </Card>
         )}
 
         {type === "snippet" && (
           <Card variant="outlined">
-            <Text className="font-medium mb-1">Language</Text>
+            <Text className="font-medium mb-1">{t("itemForm.language")}</Text>
             <select
               value={metadata.language ?? ""}
               onChange={(e) => setMetadata((m) => ({ ...m, language: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
             >
-              <option value="">Select language</option>
+              <option value="">{t("itemForm.selectLanguage")}</option>
               {SNIPPET_LANGUAGES.map((l) => (
                 <option key={l} value={l}>{l}</option>
               ))}
@@ -199,13 +210,13 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
 
         {type === "ai-rule" && (
           <Card variant="outlined">
-            <Text className="font-medium mb-1">Platform</Text>
+            <Text className="font-medium mb-1">{t("itemForm.platform")}</Text>
             <select
               value={metadata.platform ?? ""}
               onChange={(e) => setMetadata((m) => ({ ...m, platform: e.target.value }))}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              className="w-full px-3 py-2 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-sm bg-background text-foreground"
             >
-              <option value="">Select platform</option>
+              <option value="">{t("itemForm.selectPlatform")}</option>
               {AI_PLATFORMS.map((p) => (
                 <option key={p} value={p}>{p}</option>
               ))}
@@ -214,36 +225,36 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
         )}
 
         <Card variant="outlined">
-          <Text className="font-medium mb-2">Content</Text>
+          <Text className="font-medium mb-2">{t("itemForm.content")}</Text>
           <RichTextEditor
             content={content}
             onChange={setContent}
-            placeholder={`Write your ${TYPE_OPTIONS.find((o) => o.value === type)?.label.toLowerCase()} content here…`}
+            placeholder={`${t(TYPE_OPTIONS.find((o) => o.value === type)?.descKey ?? "")}…`}
           />
         </Card>
 
         <Card variant="outlined">
-          <Text className="font-medium mb-2">Tags</Text>
+          <Text className="font-medium mb-2">{t("itemForm.tags")}</Text>
           <TagInput
             tags={tags}
             onChange={setTags}
             suggestions={availableTags}
-            placeholder="Add tags (press Enter or comma)"
+            placeholder={t("itemForm.tagsPlaceholder")}
           />
         </Card>
 
         <Card variant="outlined">
-          <Text className="font-medium mb-2">Attachments</Text>
+          <Text className="font-medium mb-2">{t("itemForm.attachments")}</Text>
           <FileUpload onUpload={(url) => setAttachments((a) => [...a, url])} />
           {attachments.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
               {attachments.map((url) => (
-                <div key={url} className="flex items-center gap-1 text-sm bg-gray-100 rounded px-2 py-1">
+                <div key={url} className="flex items-center gap-1 text-sm bg-muted rounded px-2 py-1">
                   <span className="truncate max-w-xs">{url.split("/").pop()}</span>
                   <button
                     type="button"
                     onClick={() => setAttachments((a) => a.filter((u) => u !== url))}
-                    className="text-gray-400 hover:text-red-500 ml-1"
+                    className="text-muted-foreground hover:text-destructive ml-1"
                   >
                     ×
                   </button>
@@ -259,11 +270,11 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
               type="checkbox"
               checked={isPublic}
               onChange={(e) => setIsPublic(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-blue-600"
+              className="w-4 h-4 rounded border-border accent-primary"
             />
             <div>
-              <Text className="font-medium">Make Public</Text>
-              <Text variant="small" color="muted">Visible to all team members</Text>
+              <Text className="font-medium">{t("itemForm.makePublic")}</Text>
+              <Text variant="small" color="muted">{t("itemForm.makePublicDesc")}</Text>
             </div>
           </label>
         </Card>
@@ -272,17 +283,21 @@ export default function ItemFormPage({ editId }: ItemFormPageProps) {
           <button
             type="button"
             onClick={() => navigate(isEditing ? `/items/${editId}` : "/items")}
-            className="px-4 py-2 border rounded-lg hover:bg-gray-50 text-sm text-gray-600"
+            className="px-4 py-2 border border-border rounded-lg hover:bg-muted text-sm text-foreground"
           >
-            Cancel
+            {t("itemForm.cancel")}
           </button>
           <button
             type="submit"
             disabled={isPending}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-colors text-sm font-medium"
           >
             <Save className="w-4 h-4" />
-            {isPending ? "Saving…" : isEditing ? "Save Changes" : "Create Item"}
+            {isPending
+              ? t("itemForm.saving")
+              : isEditing
+              ? t("itemForm.save")
+              : t("itemForm.create")}
           </button>
         </div>
       </form>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Plus, BookOpen } from "lucide-react";
 import { Heading } from "@/components/Atoms/Heading";
 import { Text } from "@/components/Atoms/Text";
@@ -14,6 +15,7 @@ import type { ItemFilters as IItemFilters, ItemType } from "@/types/itemsTypes";
 
 export default function ItemsPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const initialType = searchParams.get("type") as ItemType | null;
 
@@ -35,24 +37,26 @@ export default function ItemsPage() {
     queryFn: getTags,
   });
 
+  const total = data?.total ?? 0;
+
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <Icon icon={BookOpen} size="lg" className="text-blue-600" />
-            <Heading level={1}>Knowledge Base</Heading>
+            <Icon icon={BookOpen} size="lg" className="text-primary" />
+            <Heading level={1}>{t("items.page.title")}</Heading>
           </div>
           <button
             onClick={() => navigate("/items/new")}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
           >
             <Plus className="w-4 h-4" />
-            New Item
+            {t("nav.newItem")}
           </button>
         </div>
         <Text variant="lead" color="muted">
-          {data?.total ?? 0} items in your knowledge base
+          {t("items.page.count", { count: total })}
         </Text>
       </div>
 
@@ -60,7 +64,7 @@ export default function ItemsPage() {
         <SearchBar
           value={filters.search ?? ""}
           onChange={(search) => setFilters((f) => ({ ...f, search, page: 1 }))}
-          placeholder="Search by title, content, or tags…"
+          placeholder={t("items.page.searchPlaceholder")}
           className="mb-4"
         />
         <ItemFilters
@@ -78,24 +82,24 @@ export default function ItemsPage() {
 
       {isError && (
         <div className="text-center py-16">
-          <Text color="muted">Failed to load items. Please try again.</Text>
+          <Text color="muted">{t("items.page.failed")}</Text>
         </div>
       )}
 
       {!isLoading && !isError && data?.data.length === 0 && (
         <div className="text-center py-16">
-          <Icon icon={BookOpen} size="xl" className="text-gray-300 mx-auto mb-4" />
-          <Heading level={3} className="text-gray-400 mb-2">No items found</Heading>
+          <Icon icon={BookOpen} size="xl" className="text-muted-foreground/30 mx-auto mb-4" />
+          <Heading level={3} className="text-muted-foreground mb-2">{t("items.page.noItems")}</Heading>
           <Text color="muted" className="mb-4">
             {filters.search || filters.type || filters.tags?.length
-              ? "Try adjusting your filters."
-              : "Create your first item to get started."}
+              ? t("items.page.noItemsFilter")
+              : t("items.page.noItemsCreate")}
           </Text>
           <button
             onClick={() => navigate("/items/new")}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
           >
-            Create Item
+            {t("items.page.createItem")}
           </button>
         </div>
       )}
@@ -113,19 +117,22 @@ export default function ItemsPage() {
               <button
                 disabled={(filters.page ?? 1) <= 1}
                 onClick={() => setFilters((f) => ({ ...f, page: (f.page ?? 1) - 1 }))}
-                className="px-4 py-2 border rounded-lg disabled:opacity-40 hover:bg-gray-50 text-sm"
+                className="px-4 py-2 border border-border rounded-lg disabled:opacity-40 hover:bg-muted text-sm"
               >
-                Previous
+                {t("items.page.previous")}
               </button>
-              <span className="px-4 py-2 text-sm text-gray-600">
-                Page {filters.page ?? 1} of {Math.ceil(data!.total / (filters.limit ?? 20))}
+              <span className="px-4 py-2 text-sm text-muted-foreground">
+                {t("items.page.page", {
+                  page: filters.page ?? 1,
+                  total: Math.ceil(data!.total / (filters.limit ?? 20)),
+                })}
               </span>
               <button
                 disabled={(filters.page ?? 1) >= Math.ceil(data!.total / (filters.limit ?? 20))}
                 onClick={() => setFilters((f) => ({ ...f, page: (f.page ?? 1) + 1 }))}
-                className="px-4 py-2 border rounded-lg disabled:opacity-40 hover:bg-gray-50 text-sm"
+                className="px-4 py-2 border border-border rounded-lg disabled:opacity-40 hover:bg-muted text-sm"
               >
-                Next
+                {t("items.page.next")}
               </button>
             </div>
           )}

@@ -48,7 +48,105 @@
     "recentItems": "פריטים אחרונים",
     "viewAll": "צפה בהכל",
     "noItems": "אין פריטים עדיין. צור את הראשון!",
-    "quickActions": "פעולות מהירות"
+    "quickActions": "פעולות מהירות",
+    "new": "חדש"
+  },
+  "items": {
+    "types": {
+      "note": "הערות",
+      "article": "מאמרים",
+      "snippet": "קטעי קוד",
+      "bookmark": "סימניות",
+      "aiRule": "חוקי AI"
+    },
+    "typesSingular": {
+      "note": "הערה",
+      "article": "מאמר",
+      "snippet": "קטע קוד",
+      "bookmark": "סימניה",
+      "aiRule": "חוק AI"
+    },
+    "typeDesc": {
+      "note": "מחשבות ורעיונות מהירים",
+      "article": "תוכן מפורט",
+      "snippet": "בלוקי קוד לשימוש חוזר",
+      "bookmark": "שמור URL לאחר כך",
+      "aiRule": "פרומפטים והוראות AI"
+    },
+    "new": "חדש",
+    "page": {
+      "title": "בסיס הידע",
+      "count_one": "פריט אחד בבסיס הידע שלך",
+      "count_other": "{{count}} פריטים בבסיס הידע שלך",
+      "count_zero": "אין עדיין פריטים בבסיס הידע שלך",
+      "searchPlaceholder": "חפש לפי כותרת, תוכן או תגיות…",
+      "noItems": "לא נמצאו פריטים",
+      "noItemsFilter": "נסה לשנות את הסינון.",
+      "noItemsCreate": "צור את הפריט הראשון שלך.",
+      "createItem": "צור פריט",
+      "previous": "הקודם",
+      "next": "הבא",
+      "page": "עמוד {{page}} מתוך {{total}}",
+      "failed": "שגיאה בטעינת הפריטים. נסה שוב."
+    }
+  },
+  "itemForm": {
+    "newItem": "פריט חדש",
+    "editItem": "עריכת פריט",
+    "backToKnowledgeBase": "בסיס הידע",
+    "backToItem": "חזרה לפריט",
+    "itemType": "סוג פריט",
+    "title": "כותרת",
+    "titleRequired": "כותרת היא שדה חובה",
+    "titlePlaceholder": "תן לפריט שלך כותרת ברורה",
+    "url": "כתובת URL",
+    "language": "שפה",
+    "selectLanguage": "בחר שפה",
+    "platform": "פלטפורמה",
+    "selectPlatform": "בחר פלטפורמה",
+    "content": "תוכן",
+    "tags": "תגיות",
+    "tagsPlaceholder": "הוסף תגיות (Enter או פסיק)",
+    "attachments": "קבצים מצורפים",
+    "makePublic": "פרסם לציבור",
+    "makePublicDesc": "יהיה גלוי לכל חברי הצוות",
+    "cancel": "ביטול",
+    "save": "שמור שינויים",
+    "create": "צור פריט",
+    "saving": "שומר…",
+    "created": "הפריט נוצר",
+    "updated": "הפריט עודכן",
+    "createFailed": "שגיאה ביצירת הפריט",
+    "updateFailed": "שגיאה בעדכון הפריט"
+  },
+  "itemDetail": {
+    "backToKnowledgeBase": "בסיס הידע",
+    "edit": "ערוך",
+    "delete": "מחק",
+    "deleteConfirm": "למחוק את הפריט? פעולה זו אינה ניתנת לביטול.",
+    "deleted": "הפריט נמחק",
+    "deleteFailed": "שגיאה במחיקת הפריט",
+    "notFound": "הפריט לא נמצא.",
+    "backLink": "חזרה לבסיס הידע",
+    "public": "ציבורי",
+    "private": "פרטי",
+    "attachments": "קבצים מצורפים",
+    "platform": "פלטפורמה: {{platform}}"
+  },
+  "profile": {
+    "title": "פרופיל",
+    "loginRequired": "התחבר כדי לצפות בפרופיל שלך.",
+    "userId": "מזהה משתמש",
+    "lastUpdated": "עודכן לאחרונה",
+    "role": "תפקיד",
+    "createdAt": "נוצר בתאריך",
+    "phone": "טלפון"
+  },
+  "footer": {
+    "allRights": "כל הזכויות שמורות.",
+    "privacy": "פרטיות",
+    "terms": "תנאים",
+    "contact": "צור קשר"
   },
   "home": {
     "badge": "הידע של הצוות שלך, מאורגן",

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { useTranslation } from "react-i18next";
 import {
   FileText,
   Bookmark,
@@ -23,52 +24,59 @@ import { useAppSelector } from "@/redux/hooks";
 
 export default function HomePage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { user } = useAppSelector((state) => state.user);
   const isAuthenticated = !!user;
 
   const contentTypes = [
     {
       icon: FileText,
-      title: "Notes",
-      description: "Quick thoughts, meeting notes, and ideas — always within reach",
+      titleKey: "home.features.notes.title",
+      descKey: "home.features.notes.desc",
       iconColor: "text-amber-600",
       iconBgColor: "bg-amber-50",
     },
     {
       icon: BookOpen,
-      title: "Articles",
-      description: "Long-form documents and research, richly formatted and searchable",
+      titleKey: "home.features.articles.title",
+      descKey: "home.features.articles.desc",
       iconColor: "text-blue-700",
       iconBgColor: "bg-blue-50",
     },
     {
       icon: Bookmark,
-      title: "Bookmarks",
-      description: "Save web links with context — no more lost tabs or forgotten URLs",
+      titleKey: "home.features.bookmarks.title",
+      descKey: "home.features.bookmarks.desc",
       iconColor: "text-purple-700",
       iconBgColor: "bg-purple-50",
     },
     {
       icon: Code2,
-      title: "Code Snippets",
-      description: "Store reusable code with language tagging and syntax highlighting",
+      titleKey: "home.features.snippets.title",
+      descKey: "home.features.snippets.desc",
       iconColor: "text-green-700",
       iconBgColor: "bg-green-50",
     },
     {
       icon: Bot,
-      title: "AI Rules & Skills",
-      description: "Organise your custom AI prompts, rules, and agent configurations",
+      titleKey: "home.features.aiRules.title",
+      descKey: "home.features.aiRules.desc",
       iconColor: "text-orange-700",
       iconBgColor: "bg-orange-50",
     },
     {
       icon: Tags,
-      title: "Tags & Full-Text Search",
-      description: "Find anything instantly — search across titles, content, and tags",
+      titleKey: "home.features.search.title",
+      descKey: "home.features.search.desc",
       iconColor: "text-rose-700",
       iconBgColor: "bg-rose-50",
     },
+  ];
+
+  const benefits = [
+    { icon: Search, titleKey: "home.benefits.search.title", descKey: "home.benefits.search.desc" },
+    { icon: Users, titleKey: "home.benefits.teams.title", descKey: "home.benefits.teams.desc" },
+    { icon: Tags, titleKey: "home.benefits.tags.title", descKey: "home.benefits.tags.desc" },
   ];
 
   return (
@@ -81,20 +89,20 @@ export default function HomePage() {
             className="inline-flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur-sm rounded-full border border-primary/20"
           >
             <Icon icon={Sparkles} size="sm" className="text-primary" />
-            <span className="text-foreground/80">Your team's knowledge, organised</span>
+            <span className="text-foreground/80">{t("home.badge")}</span>
           </Badge>
         }
         title={
           <>
             <Heading level={1} className="mb-3">
-              One place for
+              {t("home.title1")}
             </Heading>
             <Heading level={1} gradient>
-              everything you know
+              {t("home.title2")}
             </Heading>
           </>
         }
-        description="Golda is a personal and team knowledge base for notes, articles, bookmarks, code snippets, and AI rules — all searchable, tagged, and always with you."
+        description={t("home.description")}
         actions={
           <>
             {!isAuthenticated ? (
@@ -103,7 +111,7 @@ export default function HomePage() {
                 size="lg"
                 className="text-lg px-8 py-6"
               >
-                Get started free
+                {t("home.getStarted")}
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             ) : (
@@ -112,7 +120,7 @@ export default function HomePage() {
                 size="lg"
                 className="text-lg px-8 py-6"
               >
-                Open knowledge base
+                {t("home.openKnowledgeBase")}
                 <Icon icon={ArrowRight} size="md" className="ml-2" />
               </Button>
             )}
@@ -123,7 +131,7 @@ export default function HomePage() {
                 className="text-lg px-8 py-6"
                 onClick={() => navigate("/login")}
               >
-                Sign in
+                {t("home.signIn")}
               </Button>
             )}
           </>
@@ -132,16 +140,16 @@ export default function HomePage() {
 
       {/* Content Types */}
       <Section
-        title="Everything in one place"
-        subtitle="Five content types, one unified workspace"
+        title={t("home.everythingTitle")}
+        subtitle={t("home.everythingSubtitle")}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {contentTypes.map((item, i) => (
+          {contentTypes.map((item) => (
             <FeatureCard
-              key={i}
+              key={item.titleKey}
               icon={item.icon}
-              title={item.title}
-              description={item.description}
+              title={t(item.titleKey)}
+              description={t(item.descKey)}
               iconColor={item.iconColor}
               iconBgColor={item.iconBgColor}
             />
@@ -150,33 +158,17 @@ export default function HomePage() {
       </Section>
 
       {/* Benefits */}
-      <Section title="Built for teams and individuals">
+      <Section title={t("home.builtForTeams")}>
         <div className="grid md:grid-cols-3 gap-8">
-          {[
-            {
-              icon: Search,
-              title: "Instant search",
-              desc: "Full-text search across all your content — find anything in seconds",
-            },
-            {
-              icon: Users,
-              title: "Team-ready",
-              desc: "Share knowledge with your team. Role-based access keeps things organised",
-            },
-            {
-              icon: Tags,
-              title: "Smart tagging",
-              desc: "Tag your content and filter by type, tag, or date to find what you need",
-            },
-          ].map(({ icon, title, desc }) => (
-            <div key={title} className="text-center">
+          {benefits.map(({ icon, titleKey, descKey }) => (
+            <div key={titleKey} className="text-center">
               <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Icon icon={icon} size="lg" className="text-primary" />
               </div>
               <Heading level={3} className="mb-2">
-                {title}
+                {t(titleKey)}
               </Heading>
-              <Text color="muted">{desc}</Text>
+              <Text color="muted">{t(descKey)}</Text>
             </div>
           ))}
         </div>
@@ -186,10 +178,10 @@ export default function HomePage() {
       <section className="py-20 px-6 bg-secondary">
         <div className="max-w-3xl mx-auto text-center">
           <Heading level={2} className="mb-4 text-secondary-foreground">
-            Ready to organise your knowledge?
+            {t("home.ctaTitle")}
           </Heading>
           <Text variant="lead" className="mb-8 text-secondary-foreground/70">
-            Start capturing, organising, and sharing what you know.
+            {t("home.ctaSubtitle")}
           </Text>
           {!isAuthenticated ? (
             <Button
@@ -197,7 +189,7 @@ export default function HomePage() {
               size="lg"
               className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              Create your free account
+              {t("home.createAccount")}
               <Icon icon={ArrowRight} size="md" className="ml-2" />
             </Button>
           ) : (
@@ -206,7 +198,7 @@ export default function HomePage() {
               size="lg"
               className="text-lg px-8 py-6 bg-primary text-primary-foreground hover:bg-primary/90"
             >
-              Go to my knowledge base
+              {t("home.goToKnowledgeBase")}
               <Icon icon={ArrowRight} size="md" className="ml-2" />
             </Button>
           )}

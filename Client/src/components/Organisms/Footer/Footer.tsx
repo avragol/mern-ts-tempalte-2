@@ -1,39 +1,40 @@
+import { useTranslation } from "react-i18next";
 import { Text } from "@/components/Atoms/Text";
 import { cn } from "@/lib/utils";
 
 export interface FooterProps {
   appName?: string;
   currentYear?: number;
-  links?: Array<{ label: string; href: string }>;
   className?: string;
 }
-
-const defaultLinks = [
-  { label: "Privacy", href: "#" },
-  { label: "Terms", href: "#" },
-  { label: "Contact", href: "#" },
-];
 
 export default function Footer({
   appName = "Golda",
   currentYear = new Date().getFullYear(),
-  links = defaultLinks,
-  className 
+  className,
 }: FooterProps) {
+  const { t } = useTranslation();
+
+  const links = [
+    { labelKey: "footer.privacy", href: "#" },
+    { labelKey: "footer.terms", href: "#" },
+    { labelKey: "footer.contact", href: "#" },
+  ];
+
   return (
-    <footer className={cn("border-t border-gray-200 bg-white py-4 px-6", className)}>
+    <footer className={cn("border-t border-border bg-background py-4 px-6", className)}>
       <div className="flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
         <Text variant="small" color="muted">
-          © {currentYear} {appName}. All rights reserved.
+          © {currentYear} {appName}. {t("footer.allRights")}
         </Text>
         <div className="flex space-x-6">
           {links.map((link) => (
             <a
-              key={link.label}
+              key={link.labelKey}
               href={link.href}
-              className="text-gray-600 hover:text-blue-600 text-sm transition-colors"
+              className="text-muted-foreground hover:text-primary text-sm transition-colors"
             >
-              {link.label}
+              {t(link.labelKey)}
             </a>
           ))}
         </div>
